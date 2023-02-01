@@ -2,7 +2,8 @@ package leetcode
 
 import kotlin.math.max
 
-class Solution {
+class TrappingRainWater {
+    // two pointer
     fun trap(height: IntArray): Int {
         var area = 0
         var left = 0
@@ -24,7 +25,7 @@ class Solution {
 }
 
 fun main() {
-    val sol = Solution()
+    val sol = TrappingRainWater()
     val answer = sol.trap(
         intArrayOf(0,1,0,2,1,0,1,3,2,1,2,1),
     )
