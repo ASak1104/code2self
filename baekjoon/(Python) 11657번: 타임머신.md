@@ -1,4 +1,16 @@
+## 문제
+
+- 출처: [백준](https://www.acmicpc.net)
+- 문제: [11657번: 타임머신](https://www.acmicpc.net/problem/11657)
+- 등급: 골드 4
+
+<br>
+
+## 코드 - Python
+
+```python
 from sys import stdin, exit
+
 
 N, M = map(int, stdin.readline().split())
 INF = float('inf')
@@ -26,3 +38,8 @@ for i in range(1, N):
     if dist[i] is INF:
         dist[i] = -1
     print(dist[i])
+```
+
+[//]: # (<br>)
+
+[//]: # (### 해설)
