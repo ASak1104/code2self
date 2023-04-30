@@ -2,7 +2,7 @@
 
 - 출처: [백준](https://www.acmicpc.net)
 - 문제: [1018번: 체스판 다시 칠하기](https://www.acmicpc.net/problem/1018)
-- 등급: 실버4
+- 등급: 실버 4
 
 <br>
 
