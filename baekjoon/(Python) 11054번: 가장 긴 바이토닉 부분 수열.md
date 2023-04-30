@@ -1,3 +1,14 @@
+## 문제
+
+- 출처: [백준](https://www.acmicpc.net)
+- 문제: [11054번: 가장 긴 바이토닉 부분 수열](https://www.acmicpc.net/problem/11054)
+- 등급: 골드 4
+
+<br>
+
+## 코드 - Python
+
+```python
 from sys import stdin
 from bisect import bisect_left
 
@@ -28,3 +39,8 @@ res = 1
 for up, down in zip(up_scale, down_scale):
     res = max(res, up + down - 1)
 print(res)
+```
+
+[//]: # (<br>)
+
+[//]: # (### 해설)

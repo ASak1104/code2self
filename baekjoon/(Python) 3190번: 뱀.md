@@ -1,3 +1,14 @@
+## 문제
+
+- 출처: [백준](https://www.acmicpc.net)
+- 문제: [3190번: 뱀](https://www.acmicpc.net/problem/3190)
+- 등급: 골드 4
+
+<br>
+
+## 코드 - Python
+
+```python
 from sys import stdin
 from collections import deque
 
@@ -63,3 +74,8 @@ if __name__ == '__main__':
     else:
         snake.crawl_to_end()
     snake.game_over()
+```
+
+[//]: # (<br>)
+
+[//]: # (### 해설)

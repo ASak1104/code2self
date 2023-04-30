@@ -1,4 +1,16 @@
+## 문제
+
+- 출처: [백준](https://www.acmicpc.net)
+- 문제: [2291번: Sequence](https://www.acmicpc.net/problem/2291)
+- 등급: 골드 2
+
+<br>
+
+## 코드 - Python
+
+```python
 from sys import stdin
+
 
 def partition(n, k):
     if n < k:
@@ -12,6 +24,7 @@ def partition(n, k):
     res = partition(n - 1, k - 1) + partition(n - k, k)
     memo[(n, k)] = res
     return res
+
 
 N, M, K = map(int, stdin.readline().split())
 memo = dict()
@@ -29,5 +42,11 @@ for base_index in range(N - 1):
         base += 1
         for i in range(base_index, N):
             ans[i] = base
+
 ans[-1] += M - sum(ans)
 print(' '.join(map(str, ans)))
+```
+
+[//]: # (<br>)
+
+[//]: # (### 해설)
