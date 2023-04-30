@@ -1,3 +1,21 @@
+## 백준 1018번: 체스판 다시 칠하기
+
+---
+
+### 개요
+
+---
+
+- 출처: [백준](https://www.acmicpc.net)
+- 문제: [1018번: 체스판 다시 칠하기](https://www.acmicpc.net/problem/1018)
+- 등급: 실버4
+- 코드: 파이썬
+
+### 코드
+
+---
+
+```python
 from sys import stdin
 
 n, m = map(int, stdin.readline().split())
@@ -15,3 +33,8 @@ for r in range(n - 7):
             chess = chess[::-1]
         answer = min(answer, w_min, 64 - w_min)
 print(answer)
+```
+
+[//]: # (### 해설)
+
+[//]: # (---)
