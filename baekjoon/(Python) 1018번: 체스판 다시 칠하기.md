@@ -1,14 +1,15 @@
 # 백준 1018번: 체스판 다시 칠하기
 
+<br>
 
 ## 개요
-
 
 - 출처: [백준](https://www.acmicpc.net)
 - 문제: [1018번: 체스판 다시 칠하기](https://www.acmicpc.net/problem/1018)
 - 등급: 실버4
 - 코드: 파이썬
 
+<br>
 
 ## 코드
 
@@ -32,5 +33,6 @@ for r in range(n - 7):
 print(answer)
 ```
 
+[//]: # (<br>)
 
 [//]: # (### 해설)
