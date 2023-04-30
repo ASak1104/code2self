@@ -1,5 +1,17 @@
+## 문제
+
+- 출처: [백준](https://www.acmicpc.net)
+- 문제: [16236번: 아기 상어](https://www.acmicpc.net/problem/16236)
+- 등급: 골드 3
+
+<br>
+
+## 코드 - Python
+
+```python
 from sys import stdin
 from heapq import *
+
 
 N = int(stdin.readline())
 space = [[] for _ in range(N)]
@@ -43,3 +55,8 @@ while heap:
                 heappush(heap, (t + 1, r1, c1))
                 visits[r1][c1] = 1
 print(time)
+```
+
+[//]: # (<br>)
+
+[//]: # (### 해설)
