@@ -1,7 +1,19 @@
+## 문제
+
+- 출처: [Leetcode](https://leetcode.com/problemset/all/)
+- 문제: [121. Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/)
+- 등급: Easy
+
+<br>
+
+## 코드 - Python
+
+```python
 from typing import *
 
 
 class Solution:
+    
     def maxProfit(self, prices: List[int]) -> int:
         profit = 0
         buy = prices[0]
@@ -11,10 +23,8 @@ class Solution:
             if buy > prices[i]:
                 buy = prices[i]
         return profit
+```
 
+[//]: # (<br>)
 
-s = Solution()
-a = s.maxProfit(
-    [7, 1, 5, 3, 6, 4]
-)
-print(a)
+[//]: # (### 해설)
