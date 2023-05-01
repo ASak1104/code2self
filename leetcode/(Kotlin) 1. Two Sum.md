@@ -1,5 +1,14 @@
-package leatcode
+## 문제
 
+- 출처: [Leetcode](https://leetcode.com/problemset/all/)
+- 문제: [1. Two Sum](https://leetcode.com/problems/two-sum/)
+- 등급: Easy
+
+<br>
+
+## 코드 - Kotlin
+
+```kt
 class Solution {
     fun twoSum(nums: IntArray, target: Int): IntArray {
         val numsMap = mutableMapOf<Int, Int>()
@@ -10,12 +19,8 @@ class Solution {
         return intArrayOf()
     }
 }
+```
 
-fun main() {
-    val sol = Solution()
-    val answer = sol.twoSum(
-        intArrayOf(2, 7, 11, 15),
-        9
-    )
-    println(answer.contentToString())
-}
+[//]: # (<br>)
+
+[//]: # (### 해설)
