@@ -1,0 +1,11 @@
+from itertools import permutations
+
+
+def solution(n):
+    a = set()
+    for i in range(len(n)):
+        a |= set(map(int, map(''.join, permutations(n, i + 1))))
+    a -= {0, 1}
+    for i in range(2, int(max(a) ** 0.5) + 1):
+        a -= set(range(i ** 2, max(a) + 1, i))
+    return len(a)
