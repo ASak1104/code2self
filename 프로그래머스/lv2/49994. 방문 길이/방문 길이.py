@@ -1,17 +1,19 @@
 def solution(dirs):
-    memo = {'U': (0, 1), 'D': (0, -1), 'L': (-1, 0), 'R': (1, 0)}
-    visit = set()
-    
-    result = 0
-    x, y = 0, 0
+    def is_in(x, y):
+        return -5 <= x <= 5 and -5 <= y <= 5
+    memo = set()
+    move = {'U': (0, 1), 'D': (0, -1), 'R': (1, 0), 'L': (-1, 0)}
+    res = 0
+
+    pos = (0, 0)
     for d in dirs:
-        tx, ty = memo[d][0], memo[d][1]
-        if not (-5 <= x + tx <= 5 and -5 <= y + ty <= 5):
+        x, y = move[d]
+        pos_next = (pos[0] + x, pos[1] + y)
+        if not is_in(pos_next[0], pos_next[1]):
             continue
-        if not {((x, y), (x + tx, y + ty)), ((x + tx, y + ty), (x, y))} <= visit:
-            visit |= {((x, y), (x + tx, y + ty)), ((x + tx, y + ty), (x, y))}
-            result += 1
-        x += tx
-        y += ty
-        
-    return result
+        if (pos, (pos_next)) not in memo:
+            memo |= {(pos, pos_next), (pos_next, pos)}
+            res += 1
+        pos = pos_next
+
+    return res
