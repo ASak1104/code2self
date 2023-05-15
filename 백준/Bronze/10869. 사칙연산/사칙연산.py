@@ -1,0 +1,7 @@
+a, b = map(int, input().split())
+print(a + b)
+print(a - b)
+print(a * b)
+d, m = divmod(a, b)
+print(d)
+print(m)
