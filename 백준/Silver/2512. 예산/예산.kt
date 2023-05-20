@@ -9,21 +9,17 @@ fun main() = with(System.`in`.bufferedReader()) {
         return print(right)
     }
     var left = 1
-    var mid = (left + right) shr 1
-    while (left < right) {
-        var sum = 0
-        for (gov in govArr) {
-            sum += min(gov, mid)
-        }
+    while (left <= right) {
+        val mid = (left + right) shr 1
+        val sum = govArr.sumOf { min(it, mid) }
         if (sum == budget) {
             return print(mid)
         }
         if (sum > budget) {
-            right = mid
+            right = mid - 1
         } else {
             left = mid + 1
         }
-        mid = (left + right) shr 1
     }
-    print(right - 1)
+    print(right)
 }
