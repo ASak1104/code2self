@@ -26,11 +26,11 @@ class SegmentTree(private val n: Int) {
 }
 
 fun main() = with(System.`in`.bufferedReader()) {
-        val n = readLine().toInt()
-    val pairs = Array(n) { readLine().toInt() to it }
-    val athletes = IntArray(n)
-    for ((i, pair) in pairs.sortedBy { it.first }.withIndex()) {
-        athletes[pair.second] = i
+    val n = readLine().toInt()
+    val athletes = IntArray(n) { readLine().toInt() }
+    val sortedPairs = athletes.withIndex().sortedBy { it.value }
+    for ((i, p) in sortedPairs.withIndex()) {
+        athletes[p.index] = i
     }
     val st = SegmentTree(n)
     for (athlete in athletes) {
