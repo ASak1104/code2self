@@ -8,10 +8,7 @@ fun main() = with(System.`in`.bufferedReader()) {
     close()
 
     if (v1.ccw(v2) == 0 && v2.ccw(v1) == 0) {
-        if (v2.p1 in v1 || v2.p2 in v1) {
-            return print(1)
-        }
-        if (v1.p1 in v2 || v1.p2 in v2) {
+        if (v2.p1 in v1 || v2.p2 in v1 || v1.p1 in v2 || v1.p2 in v2) {
             return print(1)
         }
         return print(0)
@@ -23,19 +20,8 @@ fun main() = with(System.`in`.bufferedReader()) {
 }
 
 class Vector(array: List<Long>) {
-    val p1: Point
-    val p2: Point
-
-    init {
-        if (array[0] < array[2] || (array[0] == array[2] && array[1] <= array[3])) {
-            p1 = Point(array[0], array[1])
-            p2 = Point(array[2], array[3])
-        }
-        else {
-            p1 = Point(array[2], array[3])
-            p2 = Point(array[0], array[1])
-        }
-    }
+    val p1 = Point(array[0], array[1])
+    val p2 = Point(array[2], array[3])
 
     fun ccw(v: Vector) = ccw(v.p1) * ccw(v.p2)
 
@@ -49,7 +35,7 @@ class Vector(array: List<Long>) {
         if (p == p1 || p == p2) {
             return true
         }
-        if (p.x !in p1.x..p2.x) {
+        if (p.x !in min(p1.x, p2.x)..max(p1.x, p2.x)) {
             return false
         }
         if (p.y !in min(p1.y, p2.y)..max(p1.y, p2.y)) {
