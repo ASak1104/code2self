@@ -3,13 +3,9 @@ import kotlin.math.min
 import kotlin.math.sign
 
 fun main() = with(System.`in`.bufferedReader()) {
-    var v1 = Vector(readLine().split(' ').map(String::toLong))
-    var v2 = Vector(readLine().split(' ').map(String::toLong))
+    val v1 = Vector(readLine().split(' ').map(String::toLong))
+    val v2 = Vector(readLine().split(' ').map(String::toLong))
     close()
-
-    if (v1.p1.x > v2.p1.x || (v1.p1.x == v2.p1.x && v1.p1.y > v2.p1.y)) {
-        v1 = v2.also { v2 = v1 }
-    }
 
     if (v1.ccw(v2) == 0 && v2.ccw(v1) == 0) {
         if (v2.p1 in v1 || v2.p2 in v1) {
