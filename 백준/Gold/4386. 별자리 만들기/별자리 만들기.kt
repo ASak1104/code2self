@@ -4,12 +4,15 @@ import kotlin.math.sqrt
 
 fun main() = with(System.`in`.bufferedReader()) {
     val n = readLine().toInt()
-    val coords = Array(n) { readLine().split(' ').map(String::toDouble) }
+    val coords = Array(n) {
+        val line = StringTokenizer(readLine())
+        line.nextToken().toDouble() to line.nextToken().toDouble()
+    }
     close()
 
     val visit = BooleanArray(n)
-    val heap = PriorityQueue<Star> { a, b -> a.dist.compareTo(b.dist) }
-    heap.add(Star(0.0, 0))
+    val heap = PriorityQueue<Pair<Double, Int>>(compareBy { it.first })
+    heap.add(0.0 to 0)
     var net = n
     var result = 0.0
 
@@ -22,12 +25,10 @@ fun main() = with(System.`in`.bufferedReader()) {
 
         for (v in 1 until n) {
             if (visit[v]) continue
-            heap.add(Star(dist(coords[u], coords[v]), v))
+            val (ux, uy) = coords[u]
+            val (vx, vy) = coords[v]
+            heap.add((ux - vx).pow(2) + (uy - vy).pow(2) to v)
         }
     }
     print(result)
 }
-
-fun dist(u: List<Double>, v: List<Double>) = (v[0] - u[0]).pow(2) + (v[1] - u[1]).pow(2)
-
-data class Star(val dist: Double, val idx: Int)
