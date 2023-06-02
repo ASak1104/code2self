@@ -4,12 +4,16 @@ val MAX_VALUE = 1_000_001
 
 fun main() = with(System.`in`.bufferedReader()) {
     val (V, E) = StringTokenizer(readLine()).run { nextToken().toInt() to nextToken().toInt() }
-    val edges = Array(V) { mutableMapOf<Int, Int>() }
+    val edges = Array(V) { arrayListOf<Pair<Int, Int>>() }
 
     repeat(E) {
-        val (u, v, c) = readLine().split(' ').map(String::toInt)
-        edges[u - 1][v - 1] = c
-        edges[v - 1][u - 1] = c
+        StringTokenizer(readLine()).apply {
+            val u = nextToken().toInt() - 1
+            val v = nextToken().toInt() - 1
+            val c = nextToken().toInt()
+            edges[u].add(v to c)
+            edges[v].add(u to c)
+        }
     }
 
     val visit = BooleanArray(V)
@@ -27,7 +31,7 @@ fun main() = with(System.`in`.bufferedReader()) {
         weights += cost
         nodes++
 
-        for ((v, w) in edges[u].entries) {
+        for ((v, w) in edges[u]) {
             if (visit[v] || w == MAX_VALUE) continue
             pq.add(w to v)
         }
