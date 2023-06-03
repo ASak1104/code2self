@@ -1,52 +1,46 @@
+import java.util.*
+
+val lis = arrayListOf<Int>()
+
 fun main() = with(System.`in`.bufferedReader()) {
     val n = readLine().toInt()
-    val lis = LIS(n, readLine().split(' ').map(String::toInt))
-    print(lis.length)
+    val st = StringTokenizer(readLine())
+    val seq = IntArray(n) { st.nextToken().toInt() }
+    lis.add(seq[0])
+
+    for (i in 1 until n) {
+        update(seq[i])
+    }
+    print(lis.size)
     close()
 }
 
-class LIS(n: Int, seq: List<Int>) {
-    private val counts = IntArray(n) { 1 }
-    private val buffer = arrayListOf(seq[0])
-    private var longestIndex = 0
-    val length get() = buffer.size
-
-    init {
-        for (i in 1 until n) {
-            update(i, seq[i])
+fun update(target: Int) {
+    if (lis[lis.lastIndex] < target) {
+        lis.add(target)
+    } else {
+        val idx = bisect(target)
+        if (lis[idx] > target) {
+            lis[idx] = target
         }
     }
+}
 
-    private fun update(i: Int, target: Int) {
-        if (buffer[buffer.lastIndex] < target) {
-            buffer.add(target)
-            counts[i] = buffer.size
-            longestIndex = i
+fun bisect(t: Int): Int {
+    var s = 0
+    var e = lis.lastIndex
+
+    while (s < e) {
+        val mid = (s + e) ushr 1
+        val v = lis[mid]
+
+        if (v == t) return mid
+
+        if (v < t) {
+            s = mid + 1
         } else {
-            val idx = bisect(target)
-            if (buffer[idx] > target) {
-                buffer[idx] = target
-            }
-            counts[i] += idx
+            e = mid
         }
     }
-
-    private fun bisect(t: Int): Int {
-        var s = 0
-        var e = buffer.lastIndex
-
-        while (s < e) {
-            val mid = (s + e) ushr 1
-            val v = buffer[mid]
-
-            if (v == t) return mid
-
-            if (v < t) {
-                s = mid + 1
-            } else {
-                e = mid
-            }
-        }
-        return e
-    }
+    return e
 }
