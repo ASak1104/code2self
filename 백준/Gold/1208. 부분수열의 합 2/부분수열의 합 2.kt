@@ -8,10 +8,10 @@ fun main() = with(System.`in`.bufferedReader()) {
 
     val leftSum = SeqSum(seq.subList(0, n ushr 1)).sums
     val rightSum = SeqSum(seq.subList(n ushr 1, n)).sums
-    var res = (leftSum[s] ?: 0).toULong() + (rightSum[s] ?: 0).toULong()
-    
+    var res = (leftSum[s] ?: 0) + (rightSum[s] ?: 0).toLong()
+
     for ((k, v) in leftSum.entries) {
-        res += v.toULong() * (rightSum[s - k] ?: 0).toULong()
+        res += v * (rightSum[s - k] ?: 0).toLong()
     }
     print(res)
 }
