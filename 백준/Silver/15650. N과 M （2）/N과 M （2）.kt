@@ -1,21 +1,23 @@
 import java.util.*
 
-fun main() {
-    val (n, m) = StringTokenizer(readln()).run { nextToken().toInt() to nextToken().toInt() }
+fun main() = with(System.`in`.bufferedReader()) {
+    val (n, m2) = StringTokenizer(readLine()).run { nextToken().toInt() to (nextToken().toInt() shl 1) }
+    close()
+
     val bw = System.out.bufferedWriter()
 
-    fun travel(st: List<Int>, k: Int) {
-        if (st.size == m) {
-            bw.append(st.joinToString(" "))
+    fun travel(st: String, k: Int) {
+        if (st.length == m2) {
+            bw.append(st.subSequence(1, m2))
             bw.newLine()
             return
         }
         if (k > n) return
 
-        travel(st + k, k + 1)
+        travel("$st $k", k + 1)
         travel(st, k + 1)
     }
-    travel(emptyList(), 1)
+    travel("", 1)
 
     bw.flush()
     bw.close()
