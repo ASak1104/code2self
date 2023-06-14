@@ -1,5 +1,6 @@
 import java.util.*
 import kotlin.collections.ArrayDeque
+import kotlin.math.min
 
 fun main() = with(System.`in`.bufferedReader()) {
     val (n, k) = StringTokenizer(readLine()).run { nextToken().toInt() to nextToken().toInt() }
@@ -7,7 +8,7 @@ fun main() = with(System.`in`.bufferedReader()) {
 
     if (n >= k) return flush(n - k)
 
-    val memo = IntArray(k shl 1)
+    val memo = IntArray(min(k shl 1, 100_001))
     val queue = ArrayDeque<Int>()
     memo[n] = 1
     queue.addLast(n)
