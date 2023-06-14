@@ -1,6 +1,4 @@
 import java.util.*
-import kotlin.math.max
-import kotlin.math.min
 
 fun main() = with(System.`in`.bufferedReader()) {
     val n = readLine().toInt()
@@ -8,10 +6,16 @@ fun main() = with(System.`in`.bufferedReader()) {
         StringTokenizer(readLine()).run {
             val home = nextToken().toInt()
             val office = nextToken().toInt()
-            Point(min(home, office), max(home, office))
+
+            if (home > office)
+                Point(office, home)
+            else
+                Point(home, office)
         }
     }
     val d = readLine().toInt()
+    close()
+
     points.sortBy(Point::e)
 
     val pq = PriorityQueue<Int>()
@@ -21,14 +25,18 @@ fun main() = with(System.`in`.bufferedReader()) {
         if (point.d > d) continue
 
         val s = point.e - d
-        
-        while (pq.isNotEmpty() && pq.peek() < s) {
-            pq.poll()
-        }
+
+        while (pq.isNotEmpty() && pq.peek() < s) pq.poll()
+
         pq.add(point.s)
-        res = max(res, pq.size)
+
+        if (pq.size > res) res = pq.size
     }
-    print(res)
+    with(System.out.bufferedWriter()) {
+        append(res.toString())
+        flush()
+        close()
+    }
 }
 
 data class Point(val s: Int, val e: Int) {
