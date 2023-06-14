@@ -1,3 +1,4 @@
+
 import java.util.*
 import kotlin.math.min
 
@@ -8,6 +9,7 @@ fun main() = with(System.`in`.bufferedReader()) {
     if (n >= k) return flush(n - k, n downTo k)
 
     val memo = IntArray(min(k shl 1, 100_001)) { -1 }
+    val paths = IntArray(memo.size + 1) { -1 }
     val queue = IntArray(memo.size + 1)
     var front = 0
     var rear = 0
@@ -27,27 +29,21 @@ fun main() = with(System.`in`.bufferedReader()) {
             }
             if (next in memo.indices && memo[next] == -1) {
                 memo[next] = cnt
+                paths[next] = curr
                 queue[rear++] = next
 
                 if (next == k) break
             }
         }
     }
-    val ints = MutableList(memo[k] + 1) { k }
-    var idx = memo[k] - 1
+    val ints = mutableListOf(k)
     var prev = k
 
-    for (j in rear - 1 downTo 0) {
-        val it = queue[j]
-
-        if (memo[it] != idx) continue
-
-        if (it == prev - 1 || it == prev + 1 || it shl 1 == prev) {
-            ints[idx--] = it
-            prev = it
-        }
+    while (paths[prev] > -1) {
+        prev = paths[prev]
+        ints.add(prev)
     }
-    flush(memo[k], ints)
+    flush(memo[k], ints.reversed())
 }
 
 fun flush(t: Int, ints: Iterable<Int>) = with(System.out.bufferedWriter()) {
