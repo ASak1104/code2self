@@ -21,14 +21,14 @@ fun main() = with(System.`in`.bufferedReader()) {
     val pq = PriorityQueue<Int>()
     var res = 0
 
-    for (point in points) {
-        if (point.d > d) continue
+    points.forEach {
+        if (it.e - it.s > d) return@forEach
 
-        val s = point.e - d
+        val s = it.e - d
 
         while (pq.isNotEmpty() && pq.peek() < s) pq.poll()
 
-        pq.add(point.s)
+        pq.add(it.s)
 
         if (pq.size > res) res = pq.size
     }
@@ -39,6 +39,4 @@ fun main() = with(System.`in`.bufferedReader()) {
     }
 }
 
-data class Point(val s: Int, val e: Int) {
-    val d = e - s
-}
+data class Point(val s: Int, val e: Int)
