@@ -1,5 +1,4 @@
 import java.util.*
-import kotlin.collections.ArrayDeque
 import kotlin.math.min
 
 fun main() = with(System.`in`.bufferedReader()) {
@@ -9,15 +8,18 @@ fun main() = with(System.`in`.bufferedReader()) {
     if (n >= k) return flush(n - k)
 
     val memo = IntArray(min(k shl 1, 100_001))
-    val queue = ArrayDeque<Int>()
+    val queue = IntArray(memo.size)
+    var front = 0
+    var rear = 0
+
     memo[n] = 1
-    queue.addLast(n)
+    queue[rear++] = n
 
     while (memo[k] == 0) {
-        val curr = queue.removeFirst()
+        val curr = queue[front++]
         val cnt = memo[curr] + 1
 
-        for (i in 0..2) {
+        for (i in 0 until 3) {
             val next = when (i) {
                 0 -> curr - 1
                 1 -> curr + 1
@@ -25,7 +27,7 @@ fun main() = with(System.`in`.bufferedReader()) {
             }
             if (next in memo.indices && memo[next] == 0) {
                 memo[next] = cnt
-                queue.addLast(next)
+                queue[rear++] = next
             }
         }
     }
