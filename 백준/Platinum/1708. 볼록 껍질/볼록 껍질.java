@@ -34,22 +34,19 @@ public class Main {
         });
         points[n] = points[0];
 
-        Deque<Integer> stack = new ArrayDeque<>(n + 1);
-        stack.add(0);
-        stack.add(1);
-        int next = 2;
+        Deque<Point> stack = new ArrayDeque<>(n + 1);
 
-        while (next < n + 1) {
+        for (Point next : points) {
             while (stack.size() > 1) {
-                int second = stack.removeLast();
-                int first = stack.getLast();
+                Point second = stack.removeLast();
+                Point first = stack.getLast();
 
-                if (ccw(points[first], points[second], points[next]) > 0) {
+                if (ccw(first, second, next) > 0) {
                     stack.addLast(second);
                     break;
                 }
             }
-            stack.addLast(next++);
+            stack.addLast(next);
         }
 
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -59,10 +56,7 @@ public class Main {
     }
 
     public static int ccw(Point p0, Point p1, Point p2) {
-        long res = 0L;
-        res += p0.x * p1.y + p1.x * p2.y + p2.x * p0.y;
-        res -= p0.y * p1.x + p1.y * p2.x + p2.y * p0.x;
-        return Long.signum(res);
+        return Long.signum((p1.x - p0.x) * (p2.y - p0.y) - (p2.x - p0.x) * (p1.y - p0.y));
     }
 
     public static class Point {
