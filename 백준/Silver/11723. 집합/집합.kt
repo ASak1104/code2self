@@ -2,25 +2,26 @@ import java.util.*
 
 fun main() = with(System.`in`.bufferedReader()) {
     val bw = System.out.bufferedWriter()
-    val m = readLine().toInt()
-    val set = mutableSetOf<Int>()
+    var set = 0
 
-    repeat(m) {
+    repeat(readLine().toInt()) {
         val st = StringTokenizer(readLine())
-        val get = { st.nextToken().toInt() }
+        val cmd = st.nextToken()
 
-        when (st.nextToken()) {
-            "add" -> set += get()
-            "remove" -> set -= get()
-            "check" -> bw.append("${if(get() in set) 1 else 0}\n")
-            "toggle" -> {
-                when (val token = get()) {
-                    in set -> set -= token
-                    else -> set += token
-                }
-            }
-            "all" -> set += 1..20
-            else -> set.clear()
+        if (!st.hasMoreTokens()) {
+            set = if (cmd == "all")
+                (1 shl 20) - 1
+            else
+                0
+            return@repeat
+        }
+        val x = 1 shl (st.nextToken().toInt() - 1)
+
+        when (cmd) {
+            "add" -> set = set or x
+            "remove" -> set = set and x.inv()
+            "check" -> bw.append("${if(set and x == x) 1 else 0}\n")
+            else -> set = set xor x
         }
     }
     bw.flush()
