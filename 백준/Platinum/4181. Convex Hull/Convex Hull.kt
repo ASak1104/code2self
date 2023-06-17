@@ -8,7 +8,7 @@ fun main() = with(System.`in`.bufferedReader()) {
 
     repeat(n) {
         val (p, c) = StringTokenizer(readLine()).run {
-            Point(nextToken().toLong(), nextToken().toLong()) to nextToken()
+            Point(nextToken().toInt(), nextToken().toInt()) to nextToken()
         }
 
         if (c == "Y") points.add(p)
@@ -51,11 +51,11 @@ fun monotoneChain(points: List<Point>): ArrayDeque<Point> {
 }
 
 fun ccw(p: Point, p1: Point, p2: Point): Int {
-    val ret = (p1.x - p.x) * (p2.y - p.y) - (p2.x - p.x) * (p1.y - p.y)
+    val ret = (p1.x - p.x).toLong() * (p2.y - p.y) - (p2.x - p.x).toLong() * (p1.y - p.y)
     return ret.sign
 }
 
-class Point(val x: Long, val y: Long): Comparable<Point> {
+class Point(val x: Int, val y: Int): Comparable<Point> {
     override fun compareTo(other: Point): Int {
         return when (x == other.x) {
             true -> y.compareTo(other.y)
