@@ -51,7 +51,7 @@ public class Main {
             }
             stack.addLast(next++);
         }
-        
+
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         bw.write(Integer.toString(stack.size() - 1));
         bw.flush();
@@ -76,11 +76,6 @@ public class Main {
 
         public Long dist(Point o) {
             return (x - o.x) * (x - o.x) + (y - o.y) * (y - o.y);
-        }
-
-        @Override
-        public String toString() {
-            return String.format("%s %s", x, y);
         }
     }
 }
