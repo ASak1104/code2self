@@ -13,31 +13,17 @@ fun main() = with(System.`in`.bufferedReader()) {
 }
 
 class EulerProductFormula {
-    val memo = mutableMapOf(1L to 1L)
-
     fun query(n: Long): Long {
-        if (n in memo) return memo[n]!!
+        if (n < 3) return 1
 
-        if (isPrime(n)) {
-            memo[n] = n - 1
-            return n - 1
-        }
+        if (isPrime(n)) return n - 1
 
-        val bound = sqrt(n.toDouble()).toLong()
         val primes = arrayListOf<Long>()
 
-        for (k in 2..bound) {
+        for (k in 2..sqrt(n.toDouble()).toLong()) {
             if (n % k > 0) continue
 
-            if (isRelative(k, n / k)) {
-                val kq = query(k)
-                val nkq = query(n / k)
-
-                memo[k] = kq
-                memo[n / k] = nkq
-
-                return kq * nkq
-            }
+            if (isRelative(k, n / k)) return query(k) * query(n / k)
 
             if (isPrime(k)) primes.add(k)
         }
@@ -48,15 +34,10 @@ class EulerProductFormula {
             ret *= (k - 1)
             ret /= k
         }
-
-        memo[n] = ret
-
         return ret
     }
 
     fun isRelative(a: Long, b: Long): Boolean {
-        if (a > b) return isRelative(b, a)
-
         for (k in 2..a) {
             if (a % k == 0L && b % k == 0L) return false
         }
@@ -64,9 +45,7 @@ class EulerProductFormula {
     }
 
     fun isPrime(n: Long): Boolean {
-        val bound = sqrt(n.toDouble()).toInt()
-
-        for (k in 2..bound) {
+        for (k in 2..sqrt(n.toDouble()).toInt()) {
             if (n % k == 0L) return false
         }
         return true
