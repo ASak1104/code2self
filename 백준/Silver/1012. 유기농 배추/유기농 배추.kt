@@ -1,3 +1,4 @@
+
 import java.util.*
 import kotlin.collections.ArrayDeque
 
@@ -27,6 +28,7 @@ fun main() {
 class Farm(n: Int, m: Int, k: Int) {
     val field = Array(n) { BooleanArray(m) }
     val moves = arrayOf(1 at 0, -1 at 0, 0 at 1, 0 at -1)
+    val cabbages = ArrayList<Point>(k)
     var worm = 0
 
     init {
@@ -36,18 +38,17 @@ class Farm(n: Int, m: Int, k: Int) {
                 val r = nextToken().toInt()
 
                 field[r][c] = true
+                cabbages.add(r at c)
             }
         }
     }
 
     fun solve() {
-        for (r in field.indices) {
-            for (c in field[r].indices) {
-                if (field[r][c]) {
-                    field[r][c] = false
-                    travel(r, c)
-                    worm++
-                }
+        for (p in cabbages) {
+            if (field[p.r][p.c]) {
+                field[p.r][p.c] = false
+                travel(p.r, p.c)
+                worm++
             }
         }
     }
