@@ -17,11 +17,16 @@ fun main() = with(System.`in`.bufferedReader()) {
     close()
 
     val visit = BooleanArray(n)
-    val res = IntArray(n)
+    var max = 0
+    var maxIndex = 0
 
     fun travel(u: Int, d: Int) {
         visit[u] = true
-        res[u] = d
+
+        if (d > max) {
+            max = d
+            maxIndex = u
+        }
 
         for (v in edges[u]) {
             if (!visit[v.v]) {
@@ -34,10 +39,10 @@ fun main() = with(System.`in`.bufferedReader()) {
 
     visit.fill(false)
 
-    travel(res.indexOf(res.max()), 0)
+    travel(maxIndex, 0)
 
     with(System.out.bufferedWriter()) {
-        append("${res.max()}").flush()
+        append("$max").flush()
         close()
     }
 }
