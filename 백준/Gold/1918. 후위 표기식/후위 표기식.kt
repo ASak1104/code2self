@@ -15,7 +15,7 @@ fun main() = with(System.`in`.bufferedReader()) {
 
 fun convert(list: List<String>): String {
     val exp = removeBracket(list)
-    val deque = ArrayDeque<String>()
+    val deque = ArrayDeque<String>(exp.size ushr 1)
     var i = 0
 
     while (i < exp.size) {
@@ -50,7 +50,7 @@ fun convert(list: List<String>): String {
 }
 
 fun removeBracket(exp: List<String>): List<String> {
-    val stack = arrayListOf<String>()
+    val stack = ArrayList<String>(exp.size)
     var i = 0
 
     while (i < exp.size) {
