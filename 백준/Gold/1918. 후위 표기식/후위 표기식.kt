@@ -1,76 +1,42 @@
-val firstOperators = arrayOf("*", "/")
-val secondOperators = arrayOf("+", "-")
-
 fun main() = with(System.`in`.bufferedReader()) {
-    val expression = readLine().map { it.toString() }
+    val exp = readLine()
     close()
 
-    val res = convert(expression)
+    val stack = ArrayDeque<Char>(exp.length)
+    val bw = System.out.bufferedWriter()
 
-    with(System.out.bufferedWriter()) {
-        append(res).flush()
-        close()
-    }
-}
-
-fun convert(list: List<String>): String {
-    val exp = removeBracket(list)
-    val deque = ArrayDeque<String>(exp.size ushr 1)
-    var i = 0
-
-    while (i < exp.size) {
-        val s = exp[i++]
-
-        if (s in firstOperators) {
-            val sb = StringBuilder()
-
-            sb.append(deque.removeLast())
-            sb.append(exp[i])
-            sb.append(s)
-
-            deque.addLast(sb.toString())
-            i += 1
+    for (c in exp) {
+        if (c.isLetter()) {
+            bw.append(c)
             continue
         }
-        deque.addLast(s)
-    }
-
-    val res = StringBuilder()
-
-    while (deque.isNotEmpty()) {
-        val pop = deque.removeFirst()
-
-        if (pop in secondOperators) {
-            res.append(deque.removeFirst())
+        if (c == '(') {
+            stack.addLast(c)
+            continue
         }
-        res.append(pop)
-    }
-
-    return res.toString()
-}
-
-fun removeBracket(exp: List<String>): List<String> {
-    val stack = ArrayList<String>(exp.size)
-    var i = 0
-
-    while (i < exp.size) {
-        val s = exp[i++]
-
-        if (s == "(") {
-            var cnt = 1
-            var j = i
-
-            while (cnt != 0) {
-                if (exp[j] == "(") cnt++
-                else if (exp[j] == ")") cnt--
-                j++
+        if (c == ')') {
+            while (stack.isNotEmpty() && stack.last() != '(') {
+                bw.append(stack.removeLast())
             }
-            stack.add(convert(exp.subList(i, j - 1)))
-            i = j
+            stack.removeLast()
             continue
         }
-        stack.add(s)
+        while (stack.isNotEmpty() && value(stack.last()) >= value(c)) {
+            bw.append(stack.removeLast())
+        }
+        stack.addLast(c)
     }
 
-    return stack
+    while (stack.isNotEmpty()) {
+        bw.append(stack.removeLast())
+    }
+
+    bw.flush()
+    bw.close()
+}
+
+fun value(c: Char) = when (c) {
+    '*', '/' -> 2
+    '+', '-' -> 1
+    else -> 0
 }
