@@ -1,20 +1,18 @@
-const val INF = 1e9.toInt()
-
 fun main() = with(System.`in`.bufferedReader()) {
     val n = readLine().toInt()
+    close()
+
     val nq = NQueen(n)
 
     with(System.out.bufferedWriter()) {
-        append("${nq.res}")
-        flush()
+        append("${nq.res}").flush()
         close()
     }
 }
 
 class NQueen(val n: Int) {
     val board = Array(n) { IntArray(n) }
-    val rowW = intArrayOf(1, 1, -1, -1)
-    val colW = intArrayOf(1, -1, 1, -1)
+    val colW = intArrayOf(1, -1)
     var res = 0
 
     init {
@@ -35,7 +33,7 @@ class NQueen(val n: Int) {
             return
         }
 
-        mark(sr, sc)
+        mark(sr, sc) { i: Int, j: Int -> board[i][j]++ }
 
         val r = sr + 1
 
@@ -45,43 +43,20 @@ class NQueen(val n: Int) {
             }
         }
 
-        demark(sr, sc)
+        mark(sr, sc) { i: Int, j: Int -> board[i][j]-- }
     }
 
-    fun mark(sr: Int, sc: Int) {
-        repeat(n) { r -> board[r][sc]++ }
-        repeat(n) { c -> board[sr][c]++ }
+    inline fun mark(sr: Int, sc: Int, op: (Int, Int) -> Unit) {
+        repeat(n) { op(it, sc) }
 
-        board[sr][sc]--
-
-        for (i in 0..3) {
-            var r = sr + rowW[i]
-            var c = sc + colW[i]
+        for (w in colW) {
+            var r = sr + 1
+            var c = sc + w
 
             while (r in board.indices && c in board.indices) {
-                board[r][c]++
-
-                r += rowW[i]
-                c += colW[i]
-            }
-        }
-    }
-
-    fun demark(sr: Int, sc: Int) {
-        repeat(n) { r -> board[r][sc]-- }
-        repeat(n) { c -> board[sr][c]-- }
-
-        board[sr][sc]++
-
-        for (i in 0..3) {
-            var r = sr + rowW[i]
-            var c = sc + colW[i]
-
-            while (r in board.indices && c in board.indices) {
-                board[r][c]--
-
-                r += rowW[i]
-                c += colW[i]
+                op(r, c)
+                r++
+                c += w
             }
         }
     }
