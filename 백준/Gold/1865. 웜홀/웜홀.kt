@@ -1,6 +1,5 @@
 import java.util.*
-
-const val INF = 10001
+import kotlin.math.min
 
 fun main() = with(System.`in`.bufferedReader()) {
     val bw = System.out.bufferedWriter()
@@ -9,7 +8,7 @@ fun main() = with(System.`in`.bufferedReader()) {
         val (n, m, w) = StringTokenizer(readLine()).run {
             Triple(nextToken().toInt(), nextToken().toInt(), nextToken().toInt())
         }
-        val edges = Array(n) { IntArray(n) { INF } }
+        val edges = Array(n) { mutableMapOf<Int, Int>() }
 
         repeat(m) {
             with(StringTokenizer(readLine())) {
@@ -17,10 +16,8 @@ fun main() = with(System.`in`.bufferedReader()) {
                 val v = nextToken().toInt() - 1
                 val c = nextToken().toInt()
 
-                if (edges[u][v] > c) {
-                    edges[u][v] = c
-                    edges[v][u] = c
-                }
+                edges[u][v] = min(edges[u][v] ?: 10001, c)
+                edges[v][u] = min(edges[v][u] ?: 10001, c)
             }
         }
 
@@ -30,9 +27,7 @@ fun main() = with(System.`in`.bufferedReader()) {
                 val v = nextToken().toInt() - 1
                 val c = -nextToken().toInt()
 
-                if (edges[u][v] > c) {
-                    edges[u][v] = c
-                }
+                edges[u][v] = min(edges[u][v] ?: 10001, c)
             }
         }
 
@@ -40,10 +35,8 @@ fun main() = with(System.`in`.bufferedReader()) {
 
         repeat(n - 1) {
             for (u in edges.indices) {
-                for (v in edges.indices) {
-                    if (edges[u][v] == INF) continue
-
-                    val d =  dists[u] + edges[u][v]
+                for ((v, c) in edges[u].entries) {
+                    val d =  dists[u] + c
 
                     if (dists[v] > d) {
                         dists[v] = d
@@ -53,10 +46,8 @@ fun main() = with(System.`in`.bufferedReader()) {
         }
 
         for (u in edges.indices) {
-            for (v in edges.indices) {
-                if (edges[u][v] == INF) continue
-
-                val d =  dists[u] + edges[u][v]
+            for ((v, c) in edges[u].entries) {
+                val d =  dists[u] + c
 
                 if (dists[v] > d) {
                     bw.append("YES\n")
