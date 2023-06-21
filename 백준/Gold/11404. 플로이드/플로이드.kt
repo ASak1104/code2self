@@ -1,25 +1,25 @@
-import java.util.*
+import java.io.StreamTokenizer
 
 const val INF = Int.MAX_VALUE
 
-fun main() = with(System.`in`.bufferedReader()) {
-    val n = readLine().toInt()
-    val m = readLine().toInt()
+fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
+    val readInt = {
+        nextToken()
+        nval.toInt()
+    }
+    val n = readInt()
+    val m = readInt()
     val dist = Array(n) { IntArray(n) { INF } }
 
     repeat(n) { dist[it][it] = 0 }
 
     repeat(m) {
-        StringTokenizer(readLine()).run {
-            val u = nextToken().toInt() - 1
-            val v = nextToken().toInt() - 1
-            val c = nextToken().toInt()
+        val u = readInt() - 1
+        val v = readInt() - 1
+        val c = readInt()
 
-            if (dist[u][v] > c) dist[u][v] = c
-        }
+        if (dist[u][v] > c) dist[u][v] = c
     }
-
-    close()
 
     for (k in dist.indices) {
         for (u in dist.indices) {
