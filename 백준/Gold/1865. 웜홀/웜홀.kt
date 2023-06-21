@@ -1,5 +1,6 @@
 import java.util.*
-import kotlin.math.min
+
+lateinit var edges: Array<MutableMap<Int, Int>>
 
 fun main() = with(System.`in`.bufferedReader()) {
     val bw = System.out.bufferedWriter()
@@ -8,48 +9,29 @@ fun main() = with(System.`in`.bufferedReader()) {
         val (n, m, w) = StringTokenizer(readLine()).run {
             Triple(nextToken().toInt(), nextToken().toInt(), nextToken().toInt())
         }
-        val edges = Array(n) { mutableMapOf<Int, Int>() }
+        edges = Array(n) { mutableMapOf() }
 
-        repeat(m) {
-            with(StringTokenizer(readLine())) {
-                val u = nextToken().toInt() - 1
-                val v = nextToken().toInt() - 1
-                val c = nextToken().toInt()
+        repeat(m) { readEdge(readLine()) }
 
-                edges[u][v] = min(edges[u][v] ?: 10001, c)
-                edges[v][u] = min(edges[v][u] ?: 10001, c)
-            }
-        }
+        repeat(w) { readDirectedEdge(readLine()) }
 
-        repeat(w) {
-            with(StringTokenizer(readLine())) {
-                val u = nextToken().toInt() - 1
-                val v = nextToken().toInt() - 1
-                val c = -nextToken().toInt()
-
-                edges[u][v] = min(edges[u][v] ?: 10001, c)
-            }
-        }
-
-        val dists = IntArray(n)
+        val dist = IntArray(n)
 
         repeat(n - 1) {
-            for (u in edges.indices) {
+            for (u in dist.indices) {
                 for ((v, c) in edges[u].entries) {
-                    val d =  dists[u] + c
+                    val d = dist[u] + c
 
-                    if (dists[v] > d) {
-                        dists[v] = d
+                    if (dist[v] > d) {
+                        dist[v] = d
                     }
                 }
             }
         }
 
-        for (u in edges.indices) {
+        for (u in dist.indices) {
             for ((v, c) in edges[u].entries) {
-                val d =  dists[u] + c
-
-                if (dists[v] > d) {
+                if (dist[v] > dist[u] + c) {
                     bw.append("YES\n")
                     return@repeat
                 }
@@ -62,4 +44,31 @@ fun main() = with(System.`in`.bufferedReader()) {
 
     bw.flush()
     bw.close()
+}
+
+
+
+fun readEdge(line: String) {
+    with(StringTokenizer(line)) {
+        val u = nextToken().toInt() - 1
+        val v = nextToken().toInt() - 1
+        val c = nextToken().toInt()
+
+        if ((edges[u][v] ?: 10001) > c) {
+            edges[u][v] = c
+            edges[v][u] = c
+        }
+    }
+}
+
+fun readDirectedEdge(line: String) {
+    with(StringTokenizer(line)) {
+        val u = nextToken().toInt() - 1
+        val v = nextToken().toInt() - 1
+        val c = -nextToken().toInt()
+
+        if ((edges[u][v] ?: 10001) > c) {
+            edges[u][v] = c
+        }
+    }
 }
