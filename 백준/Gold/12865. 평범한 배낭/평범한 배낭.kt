@@ -8,12 +8,13 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
     }
     val n = readInt()
     val k = readInt()
-    val items = MutableList(n + 1) {
-        when (it) {
-            0 -> Item(0, 0)
-            else -> Item(readInt(), readInt())
-        }
+    val items = Array(n + 1) { Item(0, 0) }
+
+    repeat(n) {
+        items[it + 1].w = readInt()
+        items[it + 1].v = readInt()
     }
+
     val dp = Array(n + 1) { IntArray(k + 1) }
 
     for (i in 1..n) {
@@ -35,4 +36,4 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
     }
 }
 
-data class Item(val w: Int, val v: Int)
+data class Item(var w: Int, var v: Int)
