@@ -1,4 +1,5 @@
 import java.io.StreamTokenizer
+import kotlin.math.log2
 
 fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
     val readInt = {
@@ -6,11 +7,11 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
         nval.toInt()
     }
     val n = readInt()
-    val edges = Array(n) { ArrayList<Edge>() }
+    val edges = Array(n + 1) { ArrayList<Edge>() }
 
     repeat(n - 1) {
-        val u = readInt() - 1
-        val v = readInt() - 1
+        val u = readInt()
+        val v = readInt()
         val w = readInt()
 
         edges[u].add(Edge(v, w))
@@ -24,8 +25,8 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
     val bw = System.out.bufferedWriter()
 
     repeat(readInt()) {
-        val u = readInt() - 1
-        val v = readInt() - 1
+        val u = readInt()
+        val v = readInt()
 
         bw.append("${graph.query(u, v)}\n")
     }
@@ -33,45 +34,76 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
     bw.close()
 }
 
-class Graph(val n: Int) {
-    val parents = Array(n) { Edge(0, 0) }
-    val dist = IntArray(n)
-    var root = 0
+class Graph(n: Int) {
+    val height = log2(n.toDouble()).toInt()
+    val edges = IntArray(n + 1)
+    val parents = Array(n + 1) { IntArray(height + 1) }
+    val depths = IntArray(n + 1)
+    var root = 1
 
-    fun buildTree(edges: Array<ArrayList<Edge>>) {
-        val visit = BooleanArray(n)
+    fun buildTree(undirectedEdge: Array<ArrayList<Edge>>) {
+        fun dfs(u: Int, parent: Int) {
+            depths[u] = depths[parent] + 1
+            parents[u][0] = parent
 
-        fun travel(u: Int) {
-            visit[u] = true
+            for (d in 1..height) {
+                val p = parents[u][d - 1]
 
-            for (edge in edges[u]) {
-                if (!visit[edge.v]) {
-                    parents[edge.v].v = u
-                    parents[edge.v].w = edge.w
+                parents[u][d] = parents[p][d - 1]
+            }
 
-                    travel(edge.v)
+            for (edge in undirectedEdge[u]) {
+                if (edge.v != parent) {
+                    edges[edge.v] = edge.w
+
+                    dfs(edge.v, u)
                 }
             }
         }
-        
-        travel(root)
+
+        depths[root] = -1
+        dfs(root, root)
     }
 
-    fun query(u: Int, v: Int): Int {
-        dist.fill(-1)
+    fun query(qu: Int, qv: Int): Int {
+        if (depths[qu] < depths[qv]) return query(qv, qu)
 
-        climbTree(u, 0)
+        var u = qu
 
-        return climbTree(v, 0)
+        for (h in height downTo 0) {
+            if (depths[u] == depths[qv]) break
+
+            val pu = parents[u][h]
+
+            if (depths[pu] >= depths[qv]) u = pu
+        }
+
+        if (u == qv) return distance(qu, u, 0)
+
+        var v = qv
+        var lca = u
+
+        for (h in height downTo 0) {
+            val pu = parents[u][h]
+            val pv = parents[v][h]
+
+            when (pu) {
+                pv -> lca = pu
+                else -> {
+                    u = pu
+                    v = pv
+                }
+            }
+        }
+
+        return distance(qu, lca, 0) + distance(qv, lca, 0)
     }
 
-    fun climbTree(u: Int, d: Int): Int {
-        if (dist[u] > -1) return dist[u] + d
+    tailrec fun distance(u: Int, v: Int, w: Int): Int {
+        if (u == v) return w
 
-        dist[u] = d
-
-        return climbTree(parents[u].v, d + parents[u].w)
+        return distance(parents[u].first(), v, w + edges[u])
     }
 }
 
-data class Edge(var v: Int, var w: Int)
+data class Edge(val v: Int, val w: Int)
