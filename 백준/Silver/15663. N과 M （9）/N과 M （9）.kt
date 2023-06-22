@@ -13,7 +13,7 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
 
     seq.sort()
 
-    fun travel(i: Int, visit: Int) {
+    fun travel(visit: Int) {
         if (stack.size == m) {
             val s = stack.joinToString(" ")
 
@@ -29,7 +29,7 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
 
             if (visit and bit == 0) {
                 stack.addLast(seq[j])
-                travel(j, visit or bit)
+                travel(visit or bit)
                 stack.removeLast()
             }
         }
@@ -37,7 +37,7 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
 
     for (i in seq.indices) {
         stack.addLast(seq[i])
-        travel(i, 1 shl i)
+        travel(1 shl i)
         stack.removeLast()
     }
 
