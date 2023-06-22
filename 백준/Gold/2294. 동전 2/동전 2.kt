@@ -7,10 +7,8 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
     }
     val n = readInt()
     val k = readInt()
-    val coins = mutableSetOf<Int>()
+    val coins = IntArray(n) { readInt() }
     val memo = IntArray(k + 1) { k + 1 }
-
-    repeat(n) { coins += readInt() }
 
     memo[0] = 0
 
