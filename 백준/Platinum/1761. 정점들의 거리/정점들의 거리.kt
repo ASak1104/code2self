@@ -36,7 +36,7 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
 
 class Graph(n: Int) {
     val height = log2(n.toDouble()).toInt()
-    val edges = IntArray(n + 1)
+    val dists = IntArray(n + 1)
     val parents = Array(n + 1) { IntArray(height + 1) }
     val depths = IntArray(n + 1)
     var root = 1
@@ -54,7 +54,7 @@ class Graph(n: Int) {
 
             for (edge in undirectedEdge[u]) {
                 if (edge.v != parent) {
-                    edges[edge.v] = edge.w
+                    dists[edge.v] = dists[u] + edge.w
 
                     dfs(edge.v, u)
                 }
@@ -78,7 +78,7 @@ class Graph(n: Int) {
             if (depths[pu] >= depths[qv]) u = pu
         }
 
-        if (u == qv) return distance(qu, u, 0)
+        if (u == qv) return dists[qu] - dists[qv]
 
         var v = qv
         var lca = u
@@ -95,14 +95,7 @@ class Graph(n: Int) {
                 }
             }
         }
-
-        return distance(qu, lca, 0) + distance(qv, lca, 0)
-    }
-
-    tailrec fun distance(u: Int, v: Int, w: Int): Int {
-        if (u == v) return w
-
-        return distance(parents[u].first(), v, w + edges[u])
+        return dists[qu] + dists[qv] - 2 * dists[lca]
     }
 }
 
