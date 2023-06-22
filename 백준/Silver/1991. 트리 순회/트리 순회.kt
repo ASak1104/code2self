@@ -21,10 +21,10 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
 
     preorder(root)
     bw.newLine()
-    
+
     inorder(root)
     bw.newLine()
-    
+
     postorder(root)
     bw.flush()
     bw.close()
@@ -54,7 +54,7 @@ fun postorder(node: Node?) {
     bw.append(node.char)
 }
 
-data class Node(val char: Char) {
+class Node(val char: Char) {
     var left: Node? = null
     var right: Node? = null
 }
