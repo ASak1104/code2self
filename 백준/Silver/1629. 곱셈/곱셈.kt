@@ -2,24 +2,22 @@ import java.io.StreamTokenizer
 
 fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
     val readInt = { nextToken(); nval.toInt() }
-    var a = readInt()
+    val a = readInt().toLong()
     val b = readInt()
     val c = readInt()
 
-    a %= c
+    fun travel(k: Long, exp: Int): Long {
+        if (exp == 1) return k
 
-    fun travel(k: Long, b: Int): Long {
-        if (b == 0) return k
+        val pow = (k * k) % c
 
-        if (b == 1) return (k * a) % c
-
-        return if (b and 1 == 1)
-            (travel((k * k) % c, b ushr 1) * k) % c
+        return if (exp and 1 == 1)
+            travel(pow, exp ushr 1) * k % c
         else
-            travel((k * k) % c, b ushr 1)
+            travel(pow, exp ushr 1)
     }
 
-    val res = travel(a.toLong(), b - 1)
+    val res = travel(a % c, b)
 
     with(System.out.bufferedWriter()) {
         append("$res")
