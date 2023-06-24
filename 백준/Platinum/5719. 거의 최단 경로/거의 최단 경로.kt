@@ -1,6 +1,5 @@
 import java.io.StreamTokenizer
 import java.util.*
-import kotlin.collections.ArrayDeque
 
 const val MAX_VALUE = 1e9.toInt()
 
@@ -35,22 +34,23 @@ class Graph(val n: Int, val s: Int, val e: Int) {
 
     fun removeShortestPaths() {
         val revEdges = findShortestPaths()
-
         val visit = BooleanArray(n)
-        val queue = ArrayDeque<Int>()
+        val queue = IntArray(n)
+        var front = 0
+        var rear = 0
 
         visit[e] = true
-        queue.addLast(e)
+        queue[rear++] = e
 
-        while (queue.isNotEmpty()) {
-            val v = queue.removeFirst()
+        while (front < rear) {
+            val v = queue[front++]
 
             for (u in revEdges[v]) {
                 edges[u][v] = 0
 
                 if (!visit[u]) {
                     visit[u] = true
-                    queue.addLast(u)
+                    queue[rear++] = u
                 }
             }
         }
