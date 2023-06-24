@@ -91,15 +91,17 @@ class Graph(val n: Int, val s: Int, val e: Int) {
 
     fun getShortestDistance(): Int {
         val dists = IntArray(n) { MAX_VALUE }
-        val pq = PriorityQueue(compareBy(dists::get))
+        val pq = PriorityQueue(compareBy(Pair<Int, Int>::second))
 
         dists[s] = 0
-        pq.add(s)
+        pq.add(s to 0)
 
         while (pq.isNotEmpty()) {
-            val u = pq.poll()
+            val (u, d) = pq.poll()
 
-            if (u == e) break
+            if (u == e) return d
+
+            if (d > dists[u]) continue
 
             for (v in edges.indices) {
                 if (edges[u][v] == 0) continue
@@ -108,14 +110,11 @@ class Graph(val n: Int, val s: Int, val e: Int) {
 
                 if (dists[v] > dw) {
                     dists[v] = dw
-                    pq.add(v)
+                    pq.add(v to dw)
                 }
             }
         }
 
-        return if (dists[e] < MAX_VALUE)
-            dists[e]
-        else
-            -1
+        return -1
     }
 }
