@@ -30,14 +30,13 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
 
         if (dists[u] >= dists[e]) break
 
-        while (pq.isNotEmpty() && u == pq.peek()) pq.poll()
-
         for ((v, w) in edges[u]) {
             val dw = dists[u] + w
 
             if (dw < dists[v]) {
                 dists[v] = dw
-                pq.add(v)
+
+                if (pq.peek() != v) pq.add(v)
             }
         }
     }
