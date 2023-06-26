@@ -20,22 +20,24 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
     val s = readInt()
     val e = readInt()
     val dists = IntArray(n + 1) { INF }
-    val pq = PriorityQueue(compareBy(Edge::w))
+    val pq = PriorityQueue<Int>(compareBy { dists[it] })
 
     dists[s] = 0
-    pq.add(Edge(s, 0))
+    pq.add(s)
 
     while (pq.isNotEmpty()) {
-        val (u, d) = pq.poll()
+        val u = pq.poll()
 
-        if (d >= dists[e]) break
+        if (dists[u] >= dists[e]) break
+
+        while (pq.isNotEmpty() && u == pq.peek()) pq.poll()
 
         for ((v, w) in edges[u]) {
-            val dw = d + w
+            val dw = dists[u] + w
 
             if (dw < dists[v]) {
                 dists[v] = dw
-                pq.add(Edge(v, dw))
+                pq.add(v)
             }
         }
     }
