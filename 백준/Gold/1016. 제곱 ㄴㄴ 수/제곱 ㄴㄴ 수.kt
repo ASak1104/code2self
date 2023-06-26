@@ -8,42 +8,23 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
     }
     val min = readLong()
     val max = readLong()
-    val nonPrimes = BooleanArray(sqrt(max.toDouble()).toInt() + 1)
+    val minToMax = BooleanArray((max - min + 1).toInt())
 
-    with(nonPrimes) {
-        val maxPrime = sqrt(lastIndex.toDouble()).toInt()
-        var prime = 2
+    for (p in 2..sqrt(max.toDouble()).toInt()) {
+        val sq = 1L * p * p
 
-        while (prime <= maxPrime) {
-            val nonPrime = prime * prime
+        val start = if (min % sq == 0L)
+            min
+        else
+            min / sq * sq + sq
 
-            for (k in nonPrime..lastIndex step prime) {
-                this[k] = true
-            }
-            do { prime++ } while (this[prime])
-        }
-    }
-
-    val primes = ArrayList<Int>(78498)
-    val minToMaxNums = BooleanArray((max - min + 1).toInt())
-
-    for (i in 2..nonPrimes.lastIndex) {
-        if (!nonPrimes[i]) primes.add(i)
-    }
-
-    for (k in primes) {
-        val square = 1L * k * k
-        var start = min / square * square
-
-        if (start < min) start += square
-
-        for (unSquare in start..max step square) {
-            minToMaxNums[(unSquare - min).toInt()] = true
+        for (unSq in start..max step sq) {
+            minToMax[(unSq - min).toInt()] = true
         }
     }
 
     with(System.out.bufferedWriter()) {
-        append("${minToMaxNums.count { !it }}")
+        append("${minToMax.count { !it }}")
         flush()
         close()
     }
