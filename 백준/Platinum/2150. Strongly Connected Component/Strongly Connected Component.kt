@@ -12,13 +12,10 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
     val edges = Array(V + 1) { ArrayList<Int>() }
 
     repeat(E) {
-        val u = readInt()
-        val v = readInt()
-
-        edges[u] += v
+        edges[readInt()] += readInt()
     }
 
-    val res = PriorityQueue<ArrayList<Int>>(compareBy { it[0] })
+    val res = ArrayList<TreeSet<Int>>()
     val stack = ArrayDeque<Int>(V)
     val finish = BooleanArray(V + 1)
     val parent = IntArray(V + 1)
@@ -40,7 +37,7 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
         }
 
         if (p == parent[u]) {
-            val scc = ArrayList<Int>()
+            val scc = TreeSet<Int>()
 
             do {
                 val pop = stack.removeLast()
@@ -49,7 +46,6 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
                 scc += pop
             } while (pop != u)
 
-            scc.sort()
             res.add(scc)
         }
 
@@ -62,10 +58,14 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
 
     with(System.out.bufferedWriter()) {
         append("${res.size}\n")
-        while (res.isNotEmpty()) {
-            res.poll().forEach { append("$it ") }
+
+        res.sortBy { it.first() }
+
+        res.forEach { scc ->
+            scc.forEach { append("$it ") }
             append("-1\n")
         }
+
         flush()
         close()
     }
