@@ -1,10 +1,8 @@
 import java.io.StreamTokenizer
 
+lateinit var dp: IntArray
 lateinit var costs: IntArray
-lateinit var edges: Array<ArrayList<Int>>
-lateinit var indegrees: IntArray
-var n = 0
-var k = 0
+lateinit var revEdges: Array<ArrayList<Int>>
 
 fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
     val bw = System.out.bufferedWriter()
@@ -14,19 +12,18 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
     }
 
     repeat(readInt()) {
-        n = readInt()
-        k = readInt()
+        val n = readInt()
+        val k = readInt()
 
+        dp = IntArray(n) { -1 }
         costs = IntArray(n) { readInt() }
-        edges = Array(n) { ArrayList() }
-        indegrees = IntArray(n)
+        revEdges = Array(n) { ArrayList() }
 
         repeat(k) {
             val u = readInt() - 1
             val v = readInt() - 1
 
-            edges[u] += v
-            indegrees[v]++
+            revEdges[v] += u
         }
 
         bw.append("${acmCraft(readInt() - 1)}\n")
@@ -36,29 +33,16 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
     bw.close()
 }
 
-fun acmCraft(end: Int): Int {
-    val dists = IntArray(n)
-    val queue = ArrayDeque<Int>()
+fun acmCraft(v: Int): Int {
+    if (dp[v] >= 0) return dp[v]
 
-    for (u in 0 until n) {
-        if (indegrees[u] == 0) {
-            indegrees[u]--
-            dists[u] = costs[u]
-            queue.add(u)
-        }
+    var prev = 0
+
+    for (u in revEdges[v]) {
+        prev = maxOf(prev, acmCraft(u))
     }
 
-    while (queue.isNotEmpty()) {
-        val u = queue.removeFirst()
+    dp[v] = prev + costs[v]
 
-        for (v in edges[u]) {
-            dists[v] = maxOf(dists[v], dists[u] + costs[v])
-
-            if (--indegrees[v] == 0) {
-                queue.addLast(v)
-            }
-        }
-    }
-
-    return dists[end]
+    return dp[v]
 }
