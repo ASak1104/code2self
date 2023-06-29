@@ -1,35 +1,43 @@
-import java.util.*
-import kotlin.collections.ArrayDeque
-import kotlin.math.min
+import java.io.StreamTokenizer
 
-fun main() = with(System.`in`.bufferedReader()) {
-    val n = readLine().toInt()
-    val edges = Array(n + 1) { ArrayDeque<Int>() }
-    repeat(n - 1) {
-        StringTokenizer(readLine()).run {
-            val u = nextToken().toInt()
-            val v = nextToken().toInt()
-            edges[u].addLast(v)
-            edges[v].addLast(u)
-        }
+fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
+    val readInt = {
+        nextToken()
+        nval.toInt()
     }
-    close()
-    
-    val dp = Array(2) { IntArray(n + 1) }
+    val n = readInt()
+    val edges = Array(n + 1) { ArrayList<Int>() }
+
+    repeat(n - 1) {
+        val u = readInt()
+        val v = readInt()
+
+        edges[u] += v
+        edges[v] += u
+    }
+
+    val dp = Array(n + 1) { IntArray(2) }
     val visit = BooleanArray(n + 1)
 
     fun travel(u: Int) {
         visit[u] = true
-        dp[1][u] = 1
+        dp[u][1] = 1
 
         for (v in edges[u]) {
             if (visit[v]) continue
 
             travel(v)
-            dp[0][u] += dp[1][v]
-            dp[1][u] += min(dp[0][v], dp[1][v])
+
+            dp[u][0] += dp[v][1]
+            dp[u][1] += dp[v].min()
         }
     }
+
     travel(1)
-    print(min(dp[0][1], dp[1][1]))
+
+    with(System.out.bufferedWriter()) {
+        append("${dp[1].min()}")
+        flush()
+        close()
+    }
 }
