@@ -1,6 +1,9 @@
 import java.io.StreamTokenizer
 import kotlin.math.log2
 
+const val MIN = 1
+const val MAX = 1_000_000
+
 fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
     val readInt = {
         nextToken()
@@ -31,9 +34,9 @@ class Network(val n: Int) {
     val edges = Array(n + 1) { ArrayList<Pair<Int, Int>>() }
     val depths = IntArray(n + 1)
     val height = log2(n.toDouble()).toInt()
-    val ancestors = Array(n + 1) { IntArray(height + 1) }
-    val mins = Array(n + 1) { Array(height + 1) { Int.MAX_VALUE } }
-    val maxs = Array(n + 1) { Array(height + 1) { Int.MIN_VALUE } }
+    val ancestors = Array(height + 1) { IntArray(n + 1) }
+    val mins = Array(height + 1) { Array(n + 1) { MAX } }
+    val maxs = Array(height + 1) { Array(n + 1) { MIN } }
 
     fun addEdge(u: Int, v: Int, w: Int) {
         edges[u] += v to w
@@ -46,20 +49,20 @@ class Network(val n: Int) {
         fun dfs(u: Int, p: Int) {
             nodes.add(u)
             depths[u] = depths[p] + 1
-            ancestors[u][0] = p
+            ancestors[0][u] = p
 
             for (i in 1..height) {
-                val au = ancestors[u][i - 1]
+                val au = ancestors[i - 1][u]
 
-                ancestors[u][i] = ancestors[au][i - 1]
+                ancestors[i][u] = ancestors[i - 1][au]
             }
 
             for ((v, w) in edges[u]) {
                 when {
                     v != p -> dfs(v, u)
                     else -> {
-                        mins[u][0] = w
-                        maxs[u][0] = w
+                        mins[0][u] = w
+                        maxs[0][u] = w
                     }
                 }
             }
@@ -70,12 +73,12 @@ class Network(val n: Int) {
 
         for (u in nodes) {
             for (i in 1..height) {
-                if (ancestors[u][i] == 0) break
+                if (ancestors[i][u] == 0) break
 
-                val au = ancestors[u][i - 1]
+                val au = ancestors[i - 1][u]
 
-                mins[u][i] = minOf(mins[u][i - 1], mins[au][i - 1])
-                maxs[u][i] = maxOf(maxs[u][i - 1], maxs[au][i - 1])
+                mins[i][u] = minOf(mins[i - 1][u], mins[i - 1][au])
+                maxs[i][u] = maxOf(maxs[i - 1][u], maxs[i - 1][au])
             }
         }
     }
@@ -84,17 +87,17 @@ class Network(val n: Int) {
         if (depths[qu] < depths[qv]) return query(qv, qu)
 
         var u = qu
-        var min = Int.MAX_VALUE
-        var max = Int.MIN_VALUE
+        var min = MAX
+        var max = MIN
 
         while (depths[u] != depths[qv]) {
             var i = height
 
-            while (i > 0 && depths[ancestors[u][i]] < depths[qv]) i--
+            while (i > 0 && depths[ancestors[i][u]] < depths[qv]) i--
 
-            min = minOf(min, mins[u][i])
-            max = maxOf(max, maxs[u][i])
-            u = ancestors[u][i]
+            min = minOf(min, mins[i][u])
+            max = maxOf(max, maxs[i][u])
+            u = ancestors[i][u]
         }
 
         if (u == qv) return min to max
@@ -104,12 +107,12 @@ class Network(val n: Int) {
         while (u != v) {
             var i = height
 
-            while (i > 0 && ancestors[u][i] == ancestors[v][i]) i--
+            while (i > 0 && ancestors[i][u] == ancestors[i][v]) i--
 
-            min = minOf(min, mins[u][i], mins[v][i])
-            max = maxOf(max, maxs[u][i], maxs[v][i])
-            u = ancestors[u][i]
-            v = ancestors[v][i]
+            min = minOf(min, mins[i][u], mins[i][v])
+            max = maxOf(max, maxs[i][u], maxs[i][v])
+            u = ancestors[i][u]
+            v = ancestors[i][v]
         }
 
         return min to max
