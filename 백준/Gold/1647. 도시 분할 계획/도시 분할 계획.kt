@@ -1,5 +1,4 @@
 import java.io.StreamTokenizer
-import java.util.*
 
 fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
     val readInt = {
@@ -9,43 +8,66 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
 
     val n = readInt()
     val m = readInt()
-    val edges = Array(n) { ArrayList<Edge>() }
+    val edges = ArrayList<Edge>(m)
 
     repeat(m) {
         val u = readInt() - 1
         val v = readInt() - 1
         val w = readInt()
 
-        edges[u] += Edge(v, w)
-        edges[v] += Edge(u, w)
+        edges += Edge(u, v, w)
     }
 
-    val pq = PriorityQueue(compareBy(Edge::w))
-    val visit = BooleanArray(n)
-    val res = ArrayList<Int>()
+    edges.sortBy(Edge::w)
 
-    pq += Edge(0, 0)
+    val set = DisjointSet(n)
+    var res = 0
 
-    while (pq.isNotEmpty()) {
-        val (u, d) = pq.poll()
+    with(set) {
+        for ((u, v, w) in edges) {
+            if (network == 2) break
 
-        if (visit[u]) continue
+            if (find(u) == find(v)) continue
 
-        visit[u] = true
-        res += d
+            union(u, v)
 
-        for ((v, w) in edges[u]) {
-            if (visit[v]) continue
-
-            pq.add(Edge(v, w))
+            res += w
         }
     }
 
     with(System.out.bufferedWriter()) {
-        append("${res.sum() - res.max()}")
+        append(res.toString())
         flush()
         close()
     }
 }
 
-data class Edge(val v: Int, val w: Int)
+class DisjointSet(n: Int) {
+    val parents = IntArray(n) { it }
+    val heights = IntArray(n)
+    var network = n
+
+    fun find(u: Int): Int {
+        var root = u
+
+        while (root != parents[root]) {
+            root = parents[root]
+        }
+
+        return root
+    }
+
+    fun union(u: Int, v: Int) {
+        val ru = find(u)
+        val rv = find(v)
+
+        if (heights[ru] < heights[rv]) return union(rv, ru)
+
+        parents[rv] = ru
+        network--
+
+        if (heights[ru] == heights[rv]) heights[ru]++
+    }
+}
+
+data class Edge(val u: Int, val v: Int, val w: Int)
