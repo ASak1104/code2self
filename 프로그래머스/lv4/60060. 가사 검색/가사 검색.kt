@@ -13,12 +13,8 @@ class Solution {
             revTries[word.length]!!.addWord(word.reversed())
         }
 
-        val answer = IntArray(queries.size) {
+        return IntArray(queries.size) {
             val query = queries[it]
-
-            if (query.first() == '?' && query.last() == '?') {
-                tries[query.length]?.size ?: 0
-            }
 
             if (query.last() == '?') {
                 tries[query.length]?.match(query) ?: 0
@@ -26,14 +22,11 @@ class Solution {
                 revTries[query.length]?.match(query.reversed()) ?: 0
             }
         }
-
-        return answer
     }
 }
 
 class Trie {
     val root = Node('/')
-    var size = 0
 
     fun addWord(word: String) {
         var node = root
@@ -46,7 +39,6 @@ class Trie {
             node.counts++
             node = node.next(c)
         }
-        size++
     }
 
     fun match(word: String) = match(root, word, 0)
