@@ -9,15 +9,19 @@ private fun readInt(): Int {
 
 fun main() {
     val n = readInt()
-    val players = IntArray(n) { readInt() }
-    val playerSet = players.toSet()
+    val users = IntArray(n) { readInt() }
+    val maxUser = users.max()
 
-    val maxValue = playerSet.max()
-    val points = IntArray(maxValue + 1)
+    val points = IntArray(maxUser + 1)
+    val isUser = BooleanArray(maxUser + 1)
 
-    for (user in players) {
-        for (k in user * 2..maxValue step user) {
-            if (k in playerSet) {
+    for (user in users) {
+        isUser[user] = true
+    }
+
+    for (user in users) {
+        for (k in user * 2..maxUser step user) {
+            if (isUser[k]) {
                 points[user]++
                 points[k] -= 1
             }
@@ -25,7 +29,7 @@ fun main() {
     }
 
     with(System.out.bufferedWriter()) {
-        players.forEach { append("${points[it]} ") }
+        users.forEach { append("${points[it]} ") }
         flush()
         close()
     }
