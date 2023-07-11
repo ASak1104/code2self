@@ -10,9 +10,9 @@ private fun readInt(): Int {
 fun main() {
     val n = readInt()
     val players = IntArray(n) { readInt() }
-    val playerSet = players.toSortedSet()
+    val playerSet = players.toSet()
 
-    val maxValue = playerSet.last()
+    val maxValue = playerSet.max()
     val points = IntArray(maxValue + 1)
 
     for (user in players) {
