@@ -1,15 +1,17 @@
+import java.util.*
+
 class Solution {
     fun solution(k: Int, tangerine: IntArray): Int {
         val group = tangerine.groupBy { it }
-        val desc = group.map { it.value.size }.sortedDescending()
+        val pq = PriorityQueue<Int>(compareByDescending { it })
+
+        group.forEach { pq += it.value.size }
 
         var remain = k
         var res = 0
 
-        for (value in desc) {
-            if (remain < 1) break
-
-            remain -= value
+        while (remain > 0) {
+            remain -= pq.poll()
             res++
         }
 
