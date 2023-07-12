@@ -1,14 +1,7 @@
 class Solution {
     fun solution(k: Int, tangerine: IntArray): Int {
-        val counter = mutableMapOf<Int, Int>()
-
-        for (e in tangerine) {
-            counter[e] = (counter[e] ?: 0) + 1
-        }
-
-        val desc = counter.values.toMutableList()
-
-        desc.sortDescending()
+        val group = tangerine.groupBy { it }
+        val desc = group.map { it.value.size }.sortedDescending()
 
         var remain = k
         var res = 0
