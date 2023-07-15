@@ -2,32 +2,25 @@ import java.util.*
 
 fun main() = with(System.`in`.bufferedReader()) {
     val (n, m) = StringTokenizer(readLine()).run { nextToken().toInt() to nextToken().toInt() }
-    val edges = Array(n) { IntArray(m) }
+    val edges = Array<String>(n) { readLine() }
     val visit = Array(n) { BooleanArray(m) }
     val finish = Array(n) { BooleanArray(m) }
-    val moves = arrayOf(-1 to 0, 1 to 0, 0 to -1, 0 to 1)
-
-    for (r in 0 until n) {
-        val line = readLine()
-
-        for (c in 0 until m) {
-			edges[r][c] = when (line[c]) {
-                'U' -> 0
-                'D' -> 1
-                'L' -> 2
-                else -> 3
-            }
-        }
-    }
 
     var count = 0
 
     fun travel(r: Int, c: Int) {
         visit[r][c] = true
 
-        val pair = moves[edges[r][c]]
-        val vr = r + pair.first
-        val vc = c + pair.second
+        val vr = when (edges[r][c]) {
+            'U' -> r - 1
+            'D' -> r + 1
+            else -> r
+        }
+        val vc = when (edges[r][c]) {
+            'L' -> c - 1
+            'R' -> c + 1
+            else -> c
+        }
 
         if (!visit[vr][vc]) {
             travel(vr, vc)
@@ -44,7 +37,7 @@ fun main() = with(System.`in`.bufferedReader()) {
         }
     }
 
-    with(System.out.bufferedWriter()) { 
+    with(System.out.bufferedWriter()) {
         append("$count")
         flush()
         close()
