@@ -1,10 +1,10 @@
 # [level 2] 타겟 넘버 - 43165 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/43165) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/43165?language=kotlin) 
 
 ### 성능 요약
 
-메모리: 10.3 MB, 시간: 3.06 ms
+메모리: 61.4 MB, 시간: 0.77 ms
 
 ### 구분
 
