@@ -2,7 +2,7 @@ import java.util.*
 import kotlin.math.abs
 
 class Solution {
-    val orders = ArrayList<String>(6)
+    val orders = arrayOf("*+-", "*-+", "+*-", "+-*", "-*+", "-+*")
 
     fun solution(expression: String): Long {
         val opeList = ArrayList<Char>(49)
@@ -21,8 +21,6 @@ class Solution {
 
         numList += sb.toString().toInt()
 
-        setOrders(opeList.distinct())
-
         var res = 0L
 
         for (order in orders) {
@@ -30,29 +28,6 @@ class Solution {
         }
 
         return res
-    }
-
-    fun setOrders(opes: List<Char>) {
-        val end = (1 shl opes.size) - 1
-
-        fun travel(order: String, visit: Int) {
-            if (visit == end) {
-                orders += order
-                return
-            }
-
-            for (i in opes.indices) {
-                val mask = 1 shl i
-
-                if (visit and mask == mask) continue
-                
-                travel(order + opes[i], visit or mask)
-            }
-        }
-
-        for (i in opes.indices) {
-            travel(opes[i].toString(), 1 shl i)
-        }
     }
 
     fun calc(opeList: List<Char>, numList: List<Int>, order: String): Long {
@@ -74,6 +49,8 @@ class Solution {
                 nums.removeAt(i)
                 nums[i] = v
             }
+            
+            if (opes.isEmpty()) break
         }
 
         return nums[0]
