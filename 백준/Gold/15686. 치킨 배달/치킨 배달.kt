@@ -2,9 +2,9 @@ import java.io.StreamTokenizer
 import kotlin.math.abs
 
 val city = Array(50) { IntArray(50) }
+val dists = Array(100) { IntArray(13) }
 val houses = ArrayList<Node>(100)
 val kfcs = ArrayList<Node>(13)
-val dists = Array(100) { IntArray(13) }
 
 var m = 0
 var n = 0
@@ -64,6 +64,8 @@ fun travel(start: Int, count: Int, visit: Int) {
         }
 
         if (res > sum) res = sum
+
+        return
     }
 
     for (i in start until kfcs.size) {
