@@ -34,10 +34,6 @@ fun main() = with(System.`in`.bufferedReader()) {
         line.toCharArray()
     }
 
-    val start = dochiQ.first()
-
-    map[start.r][start.c] = 'X'
-
     while (!end) {
         t++
         moveWater()
@@ -87,7 +83,7 @@ fun moveDochi() {
             if (map[vr][vc] == 'D') {
                 arrival = true
                 end = true
-                break
+                return
             }
         }
     }
@@ -95,4 +91,4 @@ fun moveDochi() {
     if (dochiQ.isEmpty()) end = true
 }
 
-data class Node(val r: Int, val c: Int, val t: Int)
+class Node(val r: Int, val c: Int, val t: Int)
