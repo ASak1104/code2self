@@ -1,3 +1,4 @@
+
 import java.io.StreamTokenizer
 import kotlin.math.abs
 
@@ -35,7 +36,7 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
         }
     }
 
-    travel(0, 0, 0)
+    travel(0, ArrayDeque(m))
 
     with(System.out.bufferedWriter()) {
         append("$res")
@@ -44,20 +45,14 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
     }
 }
 
-fun travel(start: Int, count: Int, visit: Int) {
-    if (ksize - start + count < m) return
-
-    if (count == m) {
+fun travel(start: Int, visit: ArrayDeque<Int>) {
+    if (visit.size == m) {
         var sum = 0
 
         for (i in 0 until hsize) {
             var min = n shl 1
 
-            for (j in 0 until ksize) {
-                val mask = 1 shl j
-
-                if (visit and mask == 0) continue
-
+            for (j in visit) {
                 if (min > dists[i][j]) min = dists[i][j]
             }
 
@@ -65,13 +60,16 @@ fun travel(start: Int, count: Int, visit: Int) {
         }
 
         if (res > sum) res = sum
-        
+
         return
     }
 
     for (i in start until ksize) {
-        travel(i + 1, count + 1, visit or (1 shl i))
-        travel(i + 1, count, visit)
+        visit.addLast(i)
+
+        travel(i + 1, visit)
+
+        visit.removeLast()
     }
 }
 
