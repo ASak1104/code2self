@@ -1,8 +1,8 @@
 import java.util.*
 
 val bw = System.out.bufferedWriter()
-lateinit var alphas: ArrayList<Char>
-val vowels = setOf('a', 'e', 'i', 'o', 'u')
+lateinit var chars: ArrayList<Char>
+val vowels = arrayOf('a', 'e', 'i', 'o', 'u')
 var L = 0
 var C = 0
 
@@ -12,13 +12,13 @@ fun main() = with(System.`in`.bufferedReader()) {
         C = nextToken().toInt()
     }
 
-    alphas = ArrayList<Char>(C)
+    chars = ArrayList<Char>(C)
 
     readLine().forEach {
-        if (it.isLetter()) alphas += it
+        if (it != ' ') chars += it
     }
 
-    alphas.sort()
+    chars.sort()
 
 	travel(0, 0, 0, 0)
 
@@ -26,22 +26,19 @@ fun main() = with(System.`in`.bufferedReader()) {
     bw.close()
 }
 
-fun travel(start: Int, cnt: Int, vc: Int, visit: Int) {
-    if (cnt == L) {
-        if (cnt - vc < 2 || vc == 0) return
-
-        val sb = StringBuilder()
+fun travel(start: Int, cc: Int, vc: Int, visit: Int) {
+    if (cc + vc == L) {
+        if (cc < 2 || vc == 0) return
 
         for (i in 0 until C) {
             val mask = 1 shl i
 
             if (visit and mask == mask) {
-                sb.append(alphas[i])
+                bw.append(chars[i])
             }
         }
 
-        sb.append("\n")
-        bw.append(sb)
+        bw.newLine()
 
         return
     }
@@ -50,9 +47,11 @@ fun travel(start: Int, cnt: Int, vc: Int, visit: Int) {
         val mask = 1 shl i
 
         if (visit and mask == 0) {
-            val nvc = if (alphas[i] in vowels) vc + 1 else vc
-
-            travel(i + 1, cnt + 1, nvc, visit or mask)
+            if (chars[i] in vowels) {
+                travel(i + 1, cc, vc + 1, visit or mask)
+            } else {
+                travel(i + 1, cc + 1, vc, visit or mask)
+            }
         }
     }
 }
