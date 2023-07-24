@@ -1,13 +1,14 @@
 import java.io.StreamTokenizer
 import kotlin.math.abs
 
-val city = Array(50) { IntArray(50) }
 val dists = Array(100) { IntArray(13) }
-val houses = ArrayList<Node>(100)
-val kfcs = ArrayList<Node>(13)
+val houses = Array(100) { Node(0, 0) }
+val kfcs = Array(13) { Node(0, 0) }
 
 var m = 0
 var n = 0
+var hsize = 0
+var ksize = 0
 var res = Int.MAX_VALUE
 
 fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
@@ -19,19 +20,17 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
     n = readInt()
     m = readInt()
 
-    for (r in 0 until n) {
-        for (c in 0 until n) {
-            city[r][c] = readInt()
-
-            when (city[r][c]) {
-                1 -> houses += Node(r, c)
-                2 -> kfcs += Node(r, c)
+    repeat(n) { r ->
+        repeat(n) { c->
+            when (readInt()) {
+                1 -> houses[hsize++].set(r, c)
+                2 -> kfcs[ksize++].set(r, c)
             }
         }
     }
 
-    for (i in houses.indices) {
-        for (j in kfcs.indices) {
+    repeat(hsize) { i ->
+        repeat(ksize) { j ->
             dists[i][j] = abs(houses[i].r - kfcs[j].r) + abs(houses[i].c - kfcs[j].c)
         }
     }
@@ -46,13 +45,15 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
 }
 
 fun travel(start: Int, count: Int, visit: Int) {
+    if (ksize - start + count < m) return
+
     if (count == m) {
         var sum = 0
 
-        for (i in houses.indices) {
+        for (i in 0 until hsize) {
             var min = n shl 1
 
-            for (j in kfcs.indices) {
+            for (j in 0 until ksize) {
                 val mask = 1 shl j
 
                 if (visit and mask == 0) continue
@@ -64,14 +65,19 @@ fun travel(start: Int, count: Int, visit: Int) {
         }
 
         if (res > sum) res = sum
-
+        
         return
     }
 
-    for (i in start until kfcs.size) {
+    for (i in start until ksize) {
         travel(i + 1, count + 1, visit or (1 shl i))
         travel(i + 1, count, visit)
     }
 }
 
-class Node(val r: Int, val c: Int)
+class Node(var r: Int, var c: Int) {
+    fun set(r: Int, c: Int) {
+        this.r = r
+        this.c = c
+    }
+}
