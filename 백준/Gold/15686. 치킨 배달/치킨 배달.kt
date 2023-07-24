@@ -4,6 +4,7 @@ import kotlin.math.abs
 val city = Array(50) { IntArray(50) }
 val houses = ArrayList<Node>(100)
 val kfcs = ArrayList<Node>(13)
+val dists = Array(100) { IntArray(13) }
 
 var m = 0
 var n = 0
@@ -29,6 +30,12 @@ fun main() = with(StreamTokenizer(System.`in`.bufferedReader())) {
         }
     }
 
+    for (i in houses.indices) {
+        for (j in kfcs.indices) {
+            dists[i][j] = abs(houses[i].r - kfcs[j].r) + abs(houses[i].c - kfcs[j].c)
+        }
+    }
+
     travel(0, 0, 0)
 
     with(System.out.bufferedWriter()) {
@@ -42,15 +49,15 @@ fun travel(start: Int, count: Int, visit: Int) {
     if (count == m) {
         var sum = 0
 
-        for (house in houses) {
+        for (i in houses.indices) {
             var min = n shl 1
 
-            for (i in kfcs.indices) {
-                val mask = 1 shl i
+            for (j in kfcs.indices) {
+                val mask = 1 shl j
 
                 if (visit and mask == 0) continue
 
-                min = minOf(min, dist(house, kfcs[i]))
+                if (min > dists[i][j]) min = dists[i][j]
             }
 
             sum += min
@@ -63,10 +70,6 @@ fun travel(start: Int, count: Int, visit: Int) {
         travel(i + 1, count + 1, visit or (1 shl i))
         travel(i + 1, count, visit)
     }
-}
-
-fun dist(u: Node, v: Node): Int {
-    return abs(u.r - v.r) + abs(u.c - v.c)
 }
 
 class Node(val r: Int, val c: Int)
