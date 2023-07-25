@@ -29,7 +29,7 @@ fun main() {
     }
 
     with(System.out.bufferedWriter()) {
-		athletes.forEach { append("$it\n") }
+        athletes.forEach { append("$it\n") }
 
         flush()
         close()
@@ -37,14 +37,14 @@ fun main() {
 }
 
 class SegmentTree(val n: Int) {
-    val tree = IntArray(n * 4)
+    val tree = IntArray(n shl 2)
     val ranks = IntArray(n)
 
     fun update(node: Int) {
         update(1, 0, n, node)
     }
 
-    tailrec fun update(i: Int, start: Int, end: Int, node: Int) {
+    fun update(i: Int, start: Int, end: Int, node: Int) {
         tree[i]++
 
         if (start == end - 1) {
