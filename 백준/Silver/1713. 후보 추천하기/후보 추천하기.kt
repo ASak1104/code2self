@@ -19,7 +19,7 @@ fun main() {
 
         votes[vote]++
 
-        if (vote in states) {
+        if (votes[vote] > 1) {
             return@repeat
         }
 
@@ -28,10 +28,10 @@ fun main() {
             return@repeat
         }
 
-        val minIdx = states.minBy { votes[it] }
+        val min = states.minBy { votes[it] }
 
-        votes[minIdx] = 0
-        states.remove(minIdx)
+        votes[min] = 0
+        states.remove(min)
         states.addLast(vote)
     }
 
