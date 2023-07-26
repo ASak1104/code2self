@@ -35,7 +35,7 @@ class MinHeap {
 
     MinHeap(int n) {
         last = 0;
-        tree = new int[n << 2];
+        tree = new int[n + 1];
     }
 
     void add(int v) {
