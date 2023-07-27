@@ -20,8 +20,6 @@ class Main {
         while (n-- > 0) {
             leftPQ.add(readInt());
 
-            int middle;
-
             while (leftPQ.size() > rightPQ.size()) {
                 rightPQ.add(leftPQ.poll());
             }
@@ -30,13 +28,7 @@ class Main {
                 leftPQ.add(rightPQ.poll());
             }
 
-            if (leftPQ.size() == rightPQ.size()) {
-                middle = Math.min(leftPQ.peek(), rightPQ.peek());
-            } else {
-                middle = leftPQ.peek();
-            }
-
-            bw.append(Integer.toString(middle));
+            bw.append(Integer.toString(leftPQ.peek()));
             bw.newLine();
         }
 
