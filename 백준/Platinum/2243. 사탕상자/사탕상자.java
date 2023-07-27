@@ -12,18 +12,17 @@ public class Main {
     public static void main(String[] args) throws IOException {
         StringBuilder sb = new StringBuilder();
         int n = readInt();
-        int s = 1 << 20;
-		SegmentTree st = new SegmentTree(s);
+        SegmentTree st = new SegmentTree();
 
         while (n-- > 0) {
             int a = readInt();
             int b = readInt();
 
             if (a == 1) {
-                sb.append(st.query(1, 1, s, b));
+                sb.append(st.query(1, 1, 1_000_000, b));
                 sb.append('\n');
             } else {
-				st.insert(1, 1, s, b, readInt());
+                st.insert(1, 1, 1_000_000, b, readInt());
             }
         }
 
@@ -32,18 +31,12 @@ public class Main {
 }
 
 class SegmentTree {
-    int[] tree;
-    int cap;
-
-    SegmentTree(int n) {
-        tree = new int[n << 1];
-        cap = n;
-    }
+    int[] tree = new int[1 << 21];
 
     void insert(int node, int s, int e, int candy, int count) {
         if (candy < s || e < candy) return;
 
-		if (s == e) {
+        if (s == e) {
             tree[node] += count;
             return;
         }
@@ -61,7 +54,7 @@ class SegmentTree {
         tree[node]--;
 
         if (s == e) {
-            return node - cap + 1;
+            return s;
         }
 
         int left = node << 1;
@@ -71,6 +64,6 @@ class SegmentTree {
             return query(left, s, mid, rank);
         }
 
-		return query(left + 1, mid + 1, e, rank - tree[left]);
+        return query(left + 1, mid + 1, e, rank - tree[left]);
     }
 }
