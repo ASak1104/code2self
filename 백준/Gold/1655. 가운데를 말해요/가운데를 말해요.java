@@ -12,7 +12,7 @@ class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
         PriorityQueue<Integer> leftPQ = new PriorityQueue<>(Comparator.reverseOrder());
         PriorityQueue<Integer> rightPQ = new PriorityQueue<>();
         int n = readInt();
@@ -28,11 +28,10 @@ class Main {
                 leftPQ.add(rightPQ.poll());
             }
 
-            bw.append(Integer.toString(leftPQ.peek()));
-            bw.newLine();
+            sb.append(leftPQ.peek());
+            sb.append('\n');
         }
 
-        bw.flush();
-        bw.close();
+        System.out.print(sb);
     }
 }
