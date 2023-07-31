@@ -5,10 +5,11 @@ import java.io.StreamTokenizer;
 class Main {
 
     private static final StreamTokenizer sttk = new StreamTokenizer(new InputStreamReader(System.in));
+    private static final int[][] roads = new int[1001][1001];
+    private static final int[][] dp = new int[1002][1002];
 
     private static int readInt() throws IOException {
         sttk.nextToken();
-
         return (int) sttk.nval;
     }
 
@@ -16,8 +17,6 @@ class Main {
         int R = readInt();
         int C = readInt();
         int N = readInt();
-        int[][] roads = new int[R + 1][C + 1];
-        int[][] dp = new int[R + 2][C + 2];
 
         for (int r = 1; r <= R; r++) {
             for (int c = 1; c <= C; c++) {
@@ -46,9 +45,9 @@ class Main {
         int c = 1;
 
         while (r <= R && c <= C) {
-            roads[r][c] += (dp[r][c] & 1);
+            int next = (roads[r][c] + dp[r][c]) & 1;
 
-            if ((roads[r][c] & 1) == 1) {
+            if (next == 1) {
                 c++;
             } else {
                 r++;
