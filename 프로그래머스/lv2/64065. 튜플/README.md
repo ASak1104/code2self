@@ -1,10 +1,10 @@
 # [level 2] 튜플 - 64065 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/64065) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/64065?language=kotlin) 
 
 ### 성능 요약
 
-메모리: 10.3 MB, 시간: 0.05 ms
+메모리: 61.3 MB, 시간: 14.43 ms
 
 ### 구분
 
