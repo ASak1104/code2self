@@ -37,11 +37,10 @@ class Main {
             revEdges[v].add(u);
         }
 
-        boolean[] visit = new boolean[n + 1];
         int res = 0;
 
         for (int u = 1; u <= n; u++) {
-            Arrays.fill(visit, false);
+            boolean[] visit = new boolean[n + 1];
 
             int oriCnt = travel(u, oriEdges, visit);
             int revCnt = travel(u, revEdges, visit);
