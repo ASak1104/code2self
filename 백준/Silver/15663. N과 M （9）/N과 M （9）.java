@@ -1,15 +1,16 @@
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StreamTokenizer;
+import java.util.Arrays;
 
 class Main {
 
     static StreamTokenizer sttk = new StreamTokenizer(new InputStreamReader(System.in));
-    static LinkedList<Integer> stack = new LinkedList<>();
     static StringBuilder sb = new StringBuilder();
-    static Set<String> set = new LinkedHashSet<>();
     static int n;
     static int m;
     static int[] seq;
+    static int[] ans;
 
     static int readInt() throws IOException {
         sttk.nextToken();
@@ -20,6 +21,7 @@ class Main {
         n = readInt();
         m = readInt();
         seq = new int[n];
+        ans = new int[m];
 
         for (int i = 0; i < n; i++) {
             seq[i] = readInt();
@@ -29,41 +31,33 @@ class Main {
 
         travel(0, 0);
 
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
-        for (String s : set) {
-            bw.append(s);
-            bw.newLine();
-        }
-
-        bw.flush();
-        bw.close();
+        System.out.println(sb);
     }
 
-    static void travel(int count, int visit) {
-        if (count == m) {
-            sb.setLength(0);
-
-            for (int e : stack) {
-                sb.append(e);
+    static void travel(int idx, int visit) {
+        if (idx == m) {
+            for (int v : ans) {
+                sb.append(v);
                 sb.append(' ');
             }
-
-            set.add(sb.toString());
+            sb.append('\n');
 
             return;
         }
 
+        int prev = -1;
+
         for (int i = 0; i < n; i++) {
+            if (seq[i] == prev) continue;
+
             int mask = 1 << i;
 
             if ((visit & mask) == mask) continue;
 
-            stack.addLast(seq[i]);
+            ans[idx] = seq[i];
+            prev = seq[i];
 
-            travel(count + 1, visit | mask);
-
-            stack.removeLast();
+            travel(idx + 1, visit | mask);
         }
     }
 }
