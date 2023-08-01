@@ -12,7 +12,7 @@ class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
         int n = readInt();
         int m = readInt();
         parents = new int[n + 1];
@@ -34,14 +34,13 @@ class Main {
             }
 
             if (find(a) == find(b)) {
-                bw.append("YES\n");
+                sb.append("YES\n");
             } else {
-                bw.append("NO\n");
+                sb.append("NO\n");
             }
         }
 
-        bw.flush();
-        bw.close();
+        System.out.println(sb);
     }
 
     static int find(int node) {
