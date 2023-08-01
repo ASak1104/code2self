@@ -2,15 +2,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 class Main {
 
     static StreamTokenizer sttk = new StreamTokenizer(new InputStreamReader(System.in));
-    static List<Integer>[] oriEdges;
-    static List<Integer>[] revEdges;
-    static int n;
+    static List<Integer>[] oriEdges = new List[501];
+    static List<Integer>[] revEdges = new List[501];
+    static int n = 0;
 
     static int readInt() throws IOException {
         sttk.nextToken();
@@ -19,8 +18,6 @@ class Main {
 
     public static void main(String[] args) throws IOException {
         n = readInt();
-        oriEdges = new List[n + 1];
-        revEdges = new List[n + 1];
 
         for (int u = 1; u <= n; u++) {
             oriEdges[u] = new ArrayList<>();
