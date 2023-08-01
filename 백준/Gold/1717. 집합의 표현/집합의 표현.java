@@ -4,7 +4,6 @@ class Main {
 
     static StreamTokenizer sttk = new StreamTokenizer(new InputStreamReader(System.in));
     static int[] parents;
-    static int[] heights;
 
     static int readInt() throws IOException {
         sttk.nextToken();
@@ -16,11 +15,9 @@ class Main {
         int n = readInt();
         int m = readInt();
         parents = new int[n + 1];
-        heights = new int[n + 1];
 
         for (int u = 1; u <= n; u++) {
             parents[u] = u;
-            heights[u] = 1;
         }
 
         while (m-- > 0) {
@@ -29,7 +26,7 @@ class Main {
             int b = readInt();
 
             if (cmd == 0) {
-                merge(find(a), find(b));
+                merge(a, b);
                 continue;
             }
 
@@ -44,23 +41,19 @@ class Main {
     }
 
     static int find(int node) {
-        while (node != parents[node]) {
-            node = parents[node];
+        if (node == parents[node]) {
+            return node;
         }
 
-        return node;
+        return parents[node] = find(parents[node]);
     }
 
     static void merge(int a, int b) {
-        if (heights[a] < heights[b]) {
-            merge(b, a);
-            return;
-        }
+        a = find(a);
+        b = find(b);
+
+        if (a == b) return;
 
         parents[b] = a;
-
-        if (heights[a] == heights[b]) {
-            heights[a]++;
-        }
     }
 }
