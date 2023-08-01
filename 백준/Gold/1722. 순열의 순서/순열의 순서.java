@@ -1,12 +1,10 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StreamTokenizer;
 import java.util.StringTokenizer;
 
 class Main {
 
-    static StringTokenizer st;
     static StringBuilder sb = new StringBuilder();
     static boolean[] visit = new boolean[21];
     static int[] seq = new int[20];
@@ -16,7 +14,8 @@ class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         n = Integer.parseInt(br.readLine());
-        st = new StringTokenizer(br.readLine());
+
+        StringTokenizer st = new StringTokenizer(br.readLine());
         int k = Integer.parseInt(st.nextToken());
 
         fact[0] = 1;
@@ -26,19 +25,22 @@ class Main {
         }
 
         if (k == 1) {
-            findSeq();
+            long order = Long.parseLong(st.nextToken());
+
+            findSeq(order);
         } else {
+            for (int i = 0; i < n; i++) {
+                seq[i] = Integer.parseInt(st.nextToken());
+            }
+
             findOrder();
         }
 
         System.out.println(sb);
+        br.close();
     }
 
     static void findOrder() {
-        for (int i = 0; i < n; i++) {
-            seq[i] = Integer.parseInt(st.nextToken());
-        }
-
         long order = 1;
         int count = n - 1;
 
@@ -60,8 +62,7 @@ class Main {
         sb.append(order);
     }
 
-    static void findSeq() {
-        long order = Long.parseLong(st.nextToken());
+    static void findSeq(long order) {
         int count = n - 1;
 
         while (count > 0) {
