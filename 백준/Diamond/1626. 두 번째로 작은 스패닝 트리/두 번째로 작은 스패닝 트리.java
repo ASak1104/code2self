@@ -12,8 +12,7 @@ class Main {
     static List<Edge>[] mstEdges;
     static int[][] ancestors, maxWeights, smaxWeights;
     static int[] parents, depths;
-    static int V, E, H, MST;
-    static int SMST, max, smax;
+    static int V, E, H, MST, SMST, max, smax;
 
     static int readInt() throws IOException {
         sttk.nextToken();
@@ -40,7 +39,7 @@ class Main {
 
         int count = findMST();
 
-        if (E < V - 1 || count != V - 1) {
+        if (count != V - 1) {
             System.out.println(-1);
             return;
         }
@@ -48,9 +47,7 @@ class Main {
         build();
         findSMST();
 
-        if (SMST == Integer.MAX_VALUE) {
-            SMST = -1;
-        }
+        if (SMST == Integer.MAX_VALUE) SMST = -1;
 
         System.out.println(SMST);
     }
@@ -63,20 +60,12 @@ class Main {
 
             findMaxSMax(edge.u, edge.v);
 
-            if (max >= 0) {
-                int smst = MST - max + edge.w;
-
-                if (smst > MST) {
-                    SMST = Math.min(SMST, smst);
-                }
+            if (max >= 0 && max < edge.w) {
+                SMST = Math.min(SMST, MST - max + edge.w);
             }
 
-            if (smax >= 0) {
-                int smst = MST - smax + edge.w;
-
-                if (smst > MST) {
-                    SMST = Math.min(SMST, smst);
-                }
+            if (smax >= 0 && smax < edge.w) {
+                SMST = Math.min(SMST, MST - smax + edge.w);
             }
         }
     }
@@ -98,8 +87,7 @@ class Main {
             int aa = ancestors[a][i];
 
             if (depths[aa] >= depths[b]) {
-                setMaxSMax(maxWeights[a][i]);
-                setMaxSMax(smaxWeights[a][i]);
+                setMaxWith(a, i);
                 a = aa;
             }
         }
@@ -111,28 +99,29 @@ class Main {
             int ab = ancestors[b][i];
 
             if (aa != ab) {
-                setMaxSMax(maxWeights[a][i]);
-                setMaxSMax(smaxWeights[a][i]);
-                setMaxSMax(maxWeights[b][i]);
-                setMaxSMax(smaxWeights[b][i]);
+                setMaxWith(a, i);
+                setMaxWith(b, i);
 
                 a = aa;
                 b = ab;
             }
         }
 
-        setMaxSMax(maxWeights[a][0]);
-        setMaxSMax(smaxWeights[a][0]);
-        setMaxSMax(maxWeights[b][0]);
-        setMaxSMax(smaxWeights[b][0]);
+        setMaxWith(a, 0);
+        setMaxWith(b, 0);
+    }
+
+    static void setMaxWith(int u, int i) {
+        setMaxSMax(maxWeights[u][i]);
+        setMaxSMax(smaxWeights[u][i]);
     }
 
     static void setMaxSMax(int v) {
         if (max < v) {
             smax = max;
             max = v;
-        } else if (max > v) {
-            smax = Math.max(smax, v);
+        } else if (max > v && smax < v) {
+            smax = v;
         }
     }
 
@@ -141,11 +130,6 @@ class Main {
         ancestors = new int[V + 1][H + 1];
         maxWeights = new int[V + 1][H + 1];
         smaxWeights = new int[V + 1][H + 1];
-
-        for (int i = 0; i <= V; i++) {
-            Arrays.fill(maxWeights[i], -1);
-            Arrays.fill(smaxWeights[i], -1);
-        }
 
         depths[0] = -1;
 
@@ -186,6 +170,8 @@ class Main {
     }
 
     static int findMST() {
+        if (E < V) return -1;
+
         Arrays.sort(edges, Comparator.comparingInt(a -> a.w));
 
         int edgeCount = 0;
