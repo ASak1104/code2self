@@ -4,12 +4,10 @@ import java.io.StreamTokenizer;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.PriorityQueue;
 
 class Main {
-
     static StreamTokenizer sttk = new StreamTokenizer(new InputStreamReader(System.in));
-    static int[] parents;
-    static int n;
 
     static int readInt() throws IOException {
         sttk.nextToken();
@@ -17,62 +15,58 @@ class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        n = readInt();
+        int n = readInt();
         int m = readInt();
-        parents = new int[n + 1];
+
+        List<Edge>[] edges = new List[n + 1];
 
         for (int u = 1; u <= n; u++) {
-            parents[u] = u;
+            edges[u] = new ArrayList<>();
         }
-
-        List<Edge> edges = new ArrayList<>(m);
 
         while (m-- > 0) {
-            edges.add(new Edge(readInt(), readInt(), readInt()));
+            int u = readInt();
+            int v = readInt();
+            int w = readInt();
+
+            edges[u].add(new Edge(v, w));
+            edges[v].add(new Edge(u, w));
         }
 
-        edges.sort(Comparator.comparingInt(a -> a.w));
-
-        int edgeCount = 0;
+        int vertices = 0;
         int totalWeight = 0;
+        boolean[] visit = new boolean[n + 1];
+        PriorityQueue<Edge> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a.w));
 
-        for (Edge edge : edges) {
-            if (edgeCount == n - 1) break;
+        pq.add(new Edge(1, 0));
 
-            if (find(edge.u) == find(edge.v)) continue;
+        while (!pq.isEmpty()) {
+            Edge u = pq.poll();
 
-            merge(edge.u, edge.v);
+            if (visit[u.v]) continue;
 
-            totalWeight += edge.w;
-            edgeCount++;
+            visit[u.v] = true;
+            vertices += 1;
+            totalWeight += u.w;
+
+            if (vertices == n) break;
+
+            for (Edge edge : edges[u.v]) {
+                if (visit[edge.v]) continue;
+
+                pq.add(edge);
+            }
         }
 
         System.out.println(totalWeight);
     }
-
-    static int find(int u) {
-        if (u == parents[u]) {
-            return u;
-        }
-
-        return parents[u] = find(parents[u]);
-    }
-
-    static void merge(int u, int v) {
-        u = find(u);
-        v = find(v);
-
-        parents[v] = u;
-    }
 }
 
 class Edge {
-    int u;
     int v;
     int w;
 
-    Edge(int u, int v, int w) {
-        this.u = u;
+    Edge(int v, int w) {
         this.v = v;
         this.w = w;
     }
