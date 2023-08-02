@@ -2,13 +2,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
 class Main {
     static StreamTokenizer sttk = new StreamTokenizer(new InputStreamReader(System.in));
-    static Edge[] edges;
+    static List<Edge> edges;
     static List<Edge>[] mstEdges;
     static int[][] ancestors, maxWeights, smaxWeights;
     static int[] parents, depths;
@@ -22,15 +21,21 @@ class Main {
     public static void main(String[] args) throws IOException {
         V = readInt();
         E = readInt();
+
+        if (E < V) {
+            System.out.println(-1);
+            return;
+        }
+
         H = 1;
 
         while ((1 << H) < V) H++;
 
-        edges = new Edge[E];
+        edges = new ArrayList<>(E);
         mstEdges = new List[V + 1];
 
         for (int i = 0; i < E; i++) {
-            edges[i] = new Edge(readInt(), readInt(), readInt());
+            edges.add(new Edge(readInt(), readInt(), readInt()));
         }
 
         for (int i = 1; i <= V; i++) {
@@ -146,7 +151,7 @@ class Main {
                 maxWeights[u][i] = Math.max(maxWeights[u][i - 1], auMax);
                 smaxWeights[u][i] = smaxWeights[u][i - 1];
 
-                if (auMax != maxWeights[u][i] || smaxWeights[u][i] == maxWeights[u][i]) {
+                if (auMax != maxWeights[u][i]) {
                     smaxWeights[u][i] = auMax;
                 }
             }
@@ -170,10 +175,6 @@ class Main {
     }
 
     static int findMST() {
-        if (E < V) return -1;
-
-        Arrays.sort(edges, Comparator.comparingInt(a -> a.w));
-
         int edgeCount = 0;
 
         MST = 0;
@@ -182,6 +183,8 @@ class Main {
         for (int i = 1; i <= V; i++) {
             parents[i] = i;
         }
+
+        edges.sort(Comparator.comparingInt(a -> a.w));
 
         for (Edge edge : edges) {
             if (edgeCount == V - 1) break;
@@ -209,10 +212,8 @@ class Main {
     }
 
     static void merge(int a, int b) {
-        a = find(a);
         b = find(b);
-
-        parents[b] = a;
+        parents[b] = find(a);
     }
 }
 
