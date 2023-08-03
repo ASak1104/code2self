@@ -2,12 +2,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StreamTokenizer;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.TreeSet;
 
 class Main {
     static StreamTokenizer sttk = new StreamTokenizer(new InputStreamReader(System.in));
-    static List<Integer> points = new ArrayList<>(10_000);
+    static TreeSet<Integer> points = new TreeSet<>();
     static List<Integer>[] edges;
     static int[] ids;
     static int V, E, root, id = 0;
@@ -42,8 +42,6 @@ class Main {
             travel(root, root);
         }
 
-        points.sort(Comparator.naturalOrder());
-
         StringBuilder sb = new StringBuilder();
 
         sb.append(points.size()).append('\n');
@@ -60,7 +58,6 @@ class Main {
 
         int minId = id;
         int count = 0;
-        boolean isAdd = false;
 
         for (int v : edges[u]) {
             if (v == p) continue;
@@ -72,9 +69,8 @@ class Main {
 
             int vid = travel(u, v);
 
-            if (!isAdd && u != root && ids[u] <= vid) {
+            if (u != root && ids[u] <= vid) {
                 points.add(u);
-                isAdd = true;
             }
 
             minId = Math.min(minId, vid);
