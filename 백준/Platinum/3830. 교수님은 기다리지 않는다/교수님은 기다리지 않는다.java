@@ -1,4 +1,6 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 class Main {
@@ -43,7 +45,7 @@ class Main {
             }
 
             if (find(a) == find(b)) {
-                sb.append(findValue(b) - findValue(a));
+                sb.append(diffs[b] - diffs[a]);
             } else {
                 sb.append("UNKNOWN");
             }
@@ -55,44 +57,27 @@ class Main {
     }
 
     static int find(int a) {
-        while (a != parents[a]) {
-            a = parents[a];
+        if (a == parents[a]) {
+            return a;
         }
 
-        return a;
-    }
+        int aa = find(parents[a]);
 
-    static int findValue(int a) {
-        int v = 0;
+        diffs[a] += diffs[parents[a]];
 
-        while (a != parents[a]) {
-            v += diffs[a];
-            a = parents[a];
-        }
-
-        return v;
+        return parents[a] = aa;
     }
 
     static void merge(int a, int b, int diff) {
         int aa = find(a);
         int ab = find(b);
 
-        if (heights[aa] < heights[ab]) {
-            int temp = a;
-            int temp2 = aa;
+        if (aa == ab) return;
 
-            a = b;
-            aa = ab;
-            b = temp;
-            ab = temp2;
-            diff *= -1;
-        }
+        int newDiff = diffs[a] + diff;
+        int oriDiff = diffs[b];
 
         parents[ab] = aa;
-        diffs[ab] = findValue(a) - findValue(b) + diff;
-
-        if (heights[aa] == heights[ab]) {
-            heights[aa]++;
-        }
+        diffs[ab] = newDiff - oriDiff;
     }
 }
