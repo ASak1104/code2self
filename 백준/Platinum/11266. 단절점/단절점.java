@@ -37,9 +37,10 @@ class Main {
         }
 
         for (int u = 1; u <= V; u++) {
-            root = u;
-
-            travel(root, root);
+            if (ids[u] == 0) {
+                root = u;
+                travel(root, root);
+            }
         }
 
         StringBuilder sb = new StringBuilder();
