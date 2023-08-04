@@ -1,34 +1,42 @@
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StreamTokenizer;
+import java.util.StringTokenizer;
 
 class Main {
-    static StreamTokenizer sttk = new StreamTokenizer(new InputStreamReader(System.in));
+    static StringTokenizer st;
     static long[] tree;
     static int n, s;
 
-    static int readInt() throws IOException {
-        sttk.nextToken();
-        return (int) sttk.nval;
-    }
-
     public static void main(String[] args) throws IOException {
-        n = readInt();
-        int q = readInt();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        st = new StringTokenizer(br.readLine());
+
+        n = nextInt();
+        int q = nextInt();
+
+        st = new StringTokenizer(br.readLine());
 
         init();
 
         StringBuilder sb = new StringBuilder();
 
         while (q-- > 0) {
-            sb.append(query(readInt(), readInt())).append('\n');
-            update(readInt(), readInt());
+            st = new StringTokenizer(br.readLine());
+
+            sb.append(query(nextInt(), nextInt())).append('\n');
+            update(nextInt(), nextInt());
         }
 
         System.out.println(sb);
+        br.close();
     }
 
-    static void init() throws IOException {
+    static int nextInt() {
+        return Integer.parseInt(st.nextToken());
+    }
+
+    static void init() {
         s = 1;
 
         while (s < n) s <<= 1;
@@ -36,7 +44,7 @@ class Main {
         tree = new long[s << 1];
 
         for (int i = s; i < s + n; i++) {
-            tree[i] = readInt();
+            tree[i] = nextInt();
         }
 
         for (int i = s - 1; i > 0; i--) {
