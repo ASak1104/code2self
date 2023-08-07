@@ -1,25 +1,23 @@
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StreamTokenizer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.TreeSet;
 
 class Main {
-    static StreamTokenizer sttk = new StreamTokenizer(new InputStreamReader(System.in));
-    static TreeSet<Integer> points = new TreeSet<>();
+    static StringTokenizer st;
     static List<Integer>[] edges;
+    static TreeSet<Integer> res = new TreeSet<>();
     static int[] ids;
-    static int V, E, root, id = 0;
-
-    static int readInt() throws IOException {
-        sttk.nextToken();
-        return (int) sttk.nval;
-    }
+    static int V, E, id = 0;
 
     public static void main(String[] args) throws IOException {
-        V = readInt();
-        E = readInt();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        st = new StringTokenizer(br.readLine());
+        V = nextInt();
+        E = nextInt();
 
         ids = new int[V + 1];
         edges = new List[V + 1];
@@ -29,8 +27,9 @@ class Main {
         }
 
         for (int i = 0; i < E; i++) {
-            int u = readInt();
-            int v = readInt();
+            st = new StringTokenizer(br.readLine());
+            int u = nextInt();
+            int v = nextInt();
 
             edges[u].add(v);
             edges[v].add(u);
@@ -38,20 +37,20 @@ class Main {
 
         for (int u = 1; u <= V; u++) {
             if (ids[u] == 0) {
-                root = u;
-                travel(root, root);
+                travel(u, u);
             }
         }
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append(points.size()).append('\n');
+        sb.append(res.size()).append('\n');
 
-        for (int p : points) {
-            sb.append(p).append(' ');
+        for (int u : res) {
+            sb.append(u).append(' ');
         }
 
         System.out.println(sb);
+        br.close();
     }
 
     static int travel(int p, int u) {
@@ -68,20 +67,24 @@ class Main {
                 continue;
             }
 
-            int vid = travel(u, v);
+            int cid = travel(u, v);
 
-            if (u != root && ids[u] <= vid) {
-                points.add(u);
+            if (u != p && ids[u] <= cid) {
+                res.add(u);
             }
 
-            minId = Math.min(minId, vid);
             count++;
+            minId = Math.min(minId, cid);
         }
 
-        if (u == root && count > 1) {
-            points.add(u);
+        if (u == p && count > 1) {
+            res.add(u);
         }
 
         return minId;
+    }
+
+    static int nextInt() {
+        return Integer.parseInt(st.nextToken());
     }
 }
