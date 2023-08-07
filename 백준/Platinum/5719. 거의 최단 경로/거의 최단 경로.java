@@ -1,144 +1,117 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
-import static java.util.Comparator.comparingInt;
+class Main {
+    private static final int INF = (int) 1e9;
+    static StringTokenizer st;
+    static List<Node>[] edges;
+    static boolean[][] excepts;
+    static List<Integer>[] paths;
+    static PriorityQueue<Node> pq;
+    static int[] dists;
+    static int n, m, s, e;
 
-public class Main {
-    private static final int MAX_VALUE = (int) 1e9;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
 
-    public static void main(String[] args) throws Exception {
-        StreamTokenizer st = new StreamTokenizer(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        while (true) {
+            st = new StringTokenizer(br.readLine());
+            n = nextInt();
+            m = nextInt();
 
-        int n = nextInt(st);
-        int m = nextInt(st);
+            if (n == 0 && m == 0) break;
 
-        while (n > 0) {
-            int s = nextInt(st);
-            int e = nextInt(st);
+            st = new StringTokenizer(br.readLine());
+            s = nextInt();
+            e = nextInt();
 
-            Graph graph = new Graph(n, s, e);
+            edges = new List[n];
+            paths = new List[n];
+            excepts = new boolean[n][n];
 
-            for (int i = 0; i < m; i++) {
-                int u = nextInt(st);
-                int v = nextInt(st);
-                int w = nextInt(st);
-
-                graph.addEdge(u, v, w);
+            for (int u = 0; u < n; u++) {
+                edges[u] = new ArrayList<>();
+                paths[u] = new ArrayList<>();
             }
 
-            graph.removeShortestPaths();
+            while (m-- > 0) {
+                st = new StringTokenizer(br.readLine());
+                int u = nextInt();
+                int v = nextInt();
+                int w = nextInt();
 
-            bw.write(graph.getDistance() + "\n");
+                edges[u].add(new Node(v, w));
+            }
 
-            n = nextInt(st);
-            m = nextInt(st);
+            dijkstra();
+
+            removeShortestPath(e, s);
+
+            sb.append(dijkstra()).append('\n');
         }
 
-        bw.flush();
-        bw.close();
+        System.out.println(sb);
+        br.close();
     }
 
-    private static int nextInt(StreamTokenizer streamTokenizer) throws IOException {
-        streamTokenizer.nextToken();
-        return (int) streamTokenizer.nval;
+    static int nextInt() {
+        return Integer.parseInt(st.nextToken());
     }
 
-    private static class Graph {
-        int n;
-        int s;
-        int e;
-        int[][] edges;
-        ArrayList<Integer>[] revEdges;
+    static void removeShortestPath(int u, int d) {
+        if (u == d) return;
 
-        Graph(int n, int s, int e) {
-            this.n = n;
-            this.s = s;
-            this.e = e;
-            this.edges = new int[n][n];
-            this.revEdges = new ArrayList[n];
-
-            for (int i = 0; i < n; i++) {
-                revEdges[i] = new ArrayList<>();
+        for (int v : paths[u]) {
+            if (!excepts[v][u]) {
+                excepts[v][u] = true;
+                removeShortestPath(v, d);
             }
         }
+    }
 
-        void addEdge(int u, int v, int w) {
-            edges[u][v] = w;
-        }
+    static int dijkstra() {
+        pq = new PriorityQueue<>(n, Comparator.comparingInt(a -> a.w));
+        dists = new int[n];
 
-        void removeShortestPaths() {
-            getDistance();
+        pq.add(new Node(s, 0));
+        Arrays.fill(dists, INF);
+        dists[s] = 0;
 
-            boolean[] visited = new boolean[n];
-            ArrayDeque<Integer> queue = new ArrayDeque<>();
+        while (!pq.isEmpty()) {
+            Node u = pq.poll();
 
-            visited[e] = true;
-            queue.addLast(e);
+            if (u.w < dists[u.v]) continue;
 
-            while (!queue.isEmpty()) {
-                int v = queue.removeFirst();
+            for (Node e : edges[u.v]) {
+                if (excepts[u.v][e.v]) continue;
 
-                for (int u : revEdges[v]) {
-                    edges[u][v] = 0;
+                int dw = u.w + e.w;
 
-                    if (!visited[u]) {
-                        visited[u] = true;
-                        queue.addLast(u);
-                    }
+                if (dw < dists[e.v]) {
+                    dists[e.v] = dw;
+                    pq.add(new Node(e.v, dw));
+                    paths[e.v] = new ArrayList<>();
+                }
+
+                if (dw == dists[e.v]) {
+                    paths[e.v].add(u.v);
                 }
             }
         }
 
-        int getDistance() {
-            PriorityQueue<Node> pq = new PriorityQueue<>(comparingInt(Node::getD));
-            int[] dists = new int[n];
+        return dists[e] == INF ? -1 : dists[e];
+    }
 
-            pq.offer(new Node(s, 0));
-            Arrays.fill(dists, MAX_VALUE);
-            dists[s] = 0;
+    static class Node {
+        int v;
+        int w;
 
-            while (!pq.isEmpty()) {
-                Node curr = pq.poll();
-                int u = curr.getU();
-                int d = curr.getD();
-
-                for (int v = 0; v < n; v++) {
-                    if (edges[u][v] == 0) continue;
-
-                    int w = d + edges[u][v];
-
-                    if (dists[v] < w) continue;
-
-                    if (dists[v] != w) {
-                        dists[v] = w;
-                        pq.add(new Node(v, w));
-                        revEdges[v].clear();
-                    }
-
-                    revEdges[v].add(u);
-                }
-            }
-
-            return dists[e] < MAX_VALUE ? dists[e] : -1;
-        }
-
-        private static class Node {
-            int u;
-            int d;
-
-            Node(int u, int d) {
-                this.u = u;
-                this.d = d;
-            }
-
-            public int getU() {
-                return u;
-            }
-
-            public int getD() {
-                return d;
-            }
+        Node(int v, int w) {
+            this.v = v;
+            this.w = w;
         }
     }
 }
