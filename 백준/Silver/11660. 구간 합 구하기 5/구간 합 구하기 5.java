@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 
 class Main {
     static StringTokenizer st;
-    static long[][] seq;
+    static int[][] seq;
     static int n, m;
 
     public static void main(String[] args) throws IOException {
@@ -14,7 +14,7 @@ class Main {
         n = nextInt();
         m = nextInt();
 
-        seq = new long[n + 1][n + 1];
+        seq = new int[n + 1][n + 1];
 
         for (int r = 1; r <= n; r++) {
             st = new StringTokenizer(br.readLine());
@@ -33,7 +33,7 @@ class Main {
             int re = nextInt();
             int ce = nextInt();
 
-            long res = seq[re][ce] - seq[re][cs - 1] - seq[rs - 1][ce] + seq[rs - 1][cs - 1];
+            int res = seq[re][ce] - seq[re][cs - 1] - seq[rs - 1][ce] + seq[rs - 1][cs - 1];
 
             sb.append(res).append('\n');
         }
