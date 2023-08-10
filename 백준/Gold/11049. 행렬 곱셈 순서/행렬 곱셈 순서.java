@@ -22,29 +22,22 @@ class Main {
 
         dp = new int[n][n];
 
-        for (int i = 0; i < n - 1; i++) {
-            dp[1][i] = matrices[i][0] * matrices[i][1] * matrices[i + 1][1];
-        }
-
-        for (int k = 2; k < n; k++) {
-            for (int i = 0; i < n - k; i++) {
+        for (int k = 1; k < n; k++) {
+            for (int s = 0; s < n - k; s++) {
                 int min = Integer.MAX_VALUE;
+                int e = s + k;
 
-                for (int j = i + 1; j < i + k; j++) {
-                    int left = matrices[i][0] * matrices[j][1] * matrices[i + k][1];
-                    int right = matrices[i][0] * matrices[j][0] * matrices[i + k][1];
+                for (int j = s; j < e; j++) {
+                    int sub = matrices[s][0] * matrices[j][1] * matrices[e][1] + dp[s][j] + dp[j + 1][e];
 
-                    left += dp[j - i][i] + dp[i + k - j - 1][j + 1];
-                    right += dp[j - i - 1][i] + dp[i + k - j][j];
-
-                    min = Math.min(min, Math.min(left, right));
+                    min = Math.min(min, sub);
                 }
 
-                dp[k][i] = min;
+                dp[s][e] = min;
             }
         }
 
-        System.out.println(dp[n - 1][0]);
+        System.out.println(dp[0][n - 1]);
         br.close();
     }
 
