@@ -1,7 +1,7 @@
 import java.util.*
 
-lateinit var dp: Array<IntArray>
 lateinit var memo: Array<IntArray>
+lateinit var sums: IntArray
 
 fun main() {
     val br = System.`in`.bufferedReader()
@@ -11,30 +11,16 @@ fun main() {
     repeat(totalCast) {
         val k = br.readLine().toInt()
 
-        dp = Array(k) { IntArray(k) }
-        memo = Array(k) { IntArray(k) { -1 } }
+        memo = Array(k + 1) { IntArray(k + 1) }
+        sums = IntArray(k + 1)
 
         val st = StringTokenizer(br.readLine())
 
-        repeat(k) {
-            dp[it][it] = st.nextToken().toInt()
-            memo[it][it] = 0
+        for (i in 1..k) {
+            sums[i] = sums[i - 1] + st.nextToken().toInt()
         }
 
-        for (size in 1 until k) {
-            for (s in 0 until k - size) {
-                val e = s + size
-                var min = Int.MAX_VALUE
-
-                for (mid in s until e) {
-                    min = minOf(min, dp[s][mid] + dp[mid + 1][e])
-                }
-
-                dp[s][e] = min
-            }
-        }
-
-        bw.append("${trace(0, k - 1)}\n")
+        bw.append("${trace(1, k)}\n")
     }
 
     bw.flush()
@@ -43,19 +29,17 @@ fun main() {
 }
 
 fun trace(s: Int, e: Int): Int {
-    if (memo[s][e] != -1) return memo[s][e]
+    if (s == e) return 0
 
-    var ret = Int.MAX_VALUE
+    if (memo[s][e] != 0) return memo[s][e]
+
+    var cost = Int.MAX_VALUE
 
     for (mid in s until e) {
-        val sum = dp[s][mid] + dp[mid + 1][e]
-
-        if (sum == dp[s][e]) {
-            ret = minOf(ret, sum + trace(s, mid) + trace(mid + 1, e))
-        }
+        cost = minOf(cost, trace(s, mid) + trace(mid + 1, e))
     }
 
-    memo[s][e] = ret
+    memo[s][e] = cost + sums[e] - sums[s - 1]
 
-    return ret
+    return memo[s][e]
 }
