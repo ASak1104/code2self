@@ -11,12 +11,9 @@ fun main() {
 
     val primes = IntArray(k) { st.nextToken().toInt() }
     val visit = primes.toHashSet()
-    val pq = PriorityQueue<Int>(n shl 1)
+    val pq = PriorityQueue(visit)
 
-    primes.sort()
-    pq.addAll(visit)
-
-    var max = primes.max()
+    var max = primes.last()
 
     for (count in 1 until n) {
         val num = pq.poll()
@@ -30,7 +27,7 @@ fun main() {
 
             if (pq.size + count >= n && next > max) break
 
-            pq.add(next)
+            pq.offer(next)
             visit.add(next)
             max = maxOf(max, next)
         }
