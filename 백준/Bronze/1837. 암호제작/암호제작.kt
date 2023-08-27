@@ -12,6 +12,12 @@ fun main() {
     val primes = BooleanArray(K) { true }
     val sqrt = sqrt(K.toDouble()).toInt()
 
+    for (p in 2..sqrt) {
+        for (np in p * p until K step p) {
+            primes[np] = false
+        }
+    }
+
     for (p in 2 until K) {
         if (!primes[p]) continue
 
@@ -23,12 +29,6 @@ fun main() {
 
         if (r == 0) {
             return println("BAD $p")
-        }
-
-        if (p > sqrt) continue
-
-        for (np in p * p until K step p) {
-            primes[p] = false
         }
     }
 
