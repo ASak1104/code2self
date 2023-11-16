@@ -1,5 +1,4 @@
 import java.util.*
-import kotlin.collections.ArrayDeque
 
 val br = System.`in`.bufferedReader()
 val bw = System.out.bufferedWriter()
@@ -59,20 +58,22 @@ fun dfs(u: Int) {
 }
 
 fun bfs(start: Int) {
-    val deque = ArrayDeque<Int>(n)
+    val queue = IntArray(n)
+    var front = 0
+    var rear = 0
 
-    deque.addLast(start)
+    queue[rear++] = start
     visits[start] = true
 
-    while (deque.isNotEmpty()) {
-        val u = deque.removeFirst()
+    while (front < rear) {
+        val u = queue[front++]
 
         bw.append("$u ")
 
         for (v in edges[u]) {
             if (visits[v]) continue
 
-            deque.addLast(v)
+            queue[rear++] = v
             visits[v] = true
         }
     }
