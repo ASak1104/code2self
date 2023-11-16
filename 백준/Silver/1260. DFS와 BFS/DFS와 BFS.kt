@@ -36,7 +36,7 @@ fun main() {
 
     bw.newLine()
 
-    visits.fill(false)
+    visits = BooleanArray(n + 1)
 
     bfs(start)
 
