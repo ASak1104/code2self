@@ -18,16 +18,7 @@ class Solution {
 
     fun simulate(index: Int, localPercents: IntArray) {
         if (index == emoticons.size) {
-            val (userCount, profit) = getLocalResult(localPercents)
-
-            if (userCount > result[0]) {
-                result[0] = userCount
-                result[1] = profit
-            }
-
-            if (userCount == result[0] && profit > result[1]) {
-                result[1] = profit
-            }
+            calulate(localPercents)
 
             return
         }
@@ -39,7 +30,7 @@ class Solution {
         }
     }
 
-    fun getLocalResult(localPercents: IntArray): Pair<Int, Int> {
+    fun calulate(localPercents: IntArray) {
         val userPurchases = IntArray(users.size)
 
         for (i in users.indices) {
@@ -61,6 +52,13 @@ class Solution {
             }
         }
 
-        return joinedUserCount to profit
+        if (joinedUserCount > result[0]) {
+            result[0] = joinedUserCount
+            result[1] = profit
+        }
+
+        if (joinedUserCount == result[0] && profit > result[1]) {
+            result[1] = profit
+        }
     }
 }
