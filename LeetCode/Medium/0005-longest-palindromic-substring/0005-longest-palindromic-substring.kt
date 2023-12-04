@@ -1,5 +1,5 @@
 class Solution {
-    
+
     var start = 0
     var end = 0
 
@@ -16,15 +16,11 @@ class Solution {
         var left = leftStart
         var right = rightStart
 
-        while (left in s.indices && right in s.indices) {
-            if (s[left] != s[right]) {
-                break
-            }
-            
+        while (left in s.indices && right in s.indices && s[left] == s[right]) {
             left--
             right++
         }
-        
+
         left++
         right--
 
