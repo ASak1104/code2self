@@ -1,6 +1,11 @@
 val br = System.`in`.bufferedReader()
 val bw = System.out.bufferedWriter()
 
+val openBracket = Regex("[\\[{]")
+val closeBracket = Regex("[]}]")
+val space = Regex("\\s{2,}")
+val special = Regex("\\s*[().,:]\\s*")
+
 lateinit var target: String
 lateinit var other: String
 
@@ -33,7 +38,7 @@ fun preprocess(s: String) = s
     .trim()
     .lowercase()
     .replace(";", ",")
-    .replace(Regex("[\\[{]"), "(")
-    .replace(Regex("[]}]"), ")")
-    .replace(Regex("\\s{2,}"), " ")
-    .replace(Regex("\\s*[().,:]\\s*")) { it.value.trim() }
+    .replace(openBracket, "(")
+    .replace(closeBracket, ")")
+    .replace(space, " ")
+    .replace(special) { it.value.trim() }
