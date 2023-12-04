@@ -16,7 +16,7 @@ class Solution {
         return words.values.toList()
     }
 
-    inline fun generateKey(word: String): String {
+    fun generateKey(word: String): String {
         val freq = CharArray(26)
 
         for (c in word) {
