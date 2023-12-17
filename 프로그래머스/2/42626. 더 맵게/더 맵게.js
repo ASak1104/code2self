@@ -1,5 +1,3 @@
-const heap = []
-
 const solution = (scoville, K) => {
     let count = 0;
 
