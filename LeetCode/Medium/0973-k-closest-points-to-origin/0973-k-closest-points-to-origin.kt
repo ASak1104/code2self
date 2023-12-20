@@ -1,5 +1,4 @@
 import java.util.*
-import kotlin.math.pow
 import kotlin.math.sqrt
 
 class Solution {
@@ -23,9 +22,6 @@ class Solution {
     }
 
     fun distance(point: IntArray): Double {
-        val x = point[0].toDouble()
-        val y = point[1].toDouble()
-
-        return sqrt(x.pow(2) + y.pow(2))
+        return sqrt(point[0].toDouble() * point[0] + point[1] * point[1])
     }
 }
