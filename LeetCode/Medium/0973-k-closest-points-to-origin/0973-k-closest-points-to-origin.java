@@ -4,6 +4,10 @@ import java.util.PriorityQueue;
 
 class Solution {
 
+    public static void main(String[] args) {
+        new Solution().kClosest(new int[][]{{6, 10}, {-3, 3}, {-2, 5}, {0, 2}}, 3);
+    }
+
     public int[][] kClosest(int[][] points, int k) {
         PriorityQueue<Point> pq = new PriorityQueue<>(k, Comparator.reverseOrder());
 
@@ -31,7 +35,7 @@ class Solution {
 
         Point(int[] point) {
             this.point = point;
-            this.dist = Math.sqrt(Math.pow(point[0], 2) + Math.pow(point[1], 2));
+            this.dist = Math.sqrt(point[0] * point[0] + point[1] * point[1]);
         }
 
         @Override
