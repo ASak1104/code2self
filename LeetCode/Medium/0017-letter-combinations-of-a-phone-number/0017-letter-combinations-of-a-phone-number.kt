@@ -1,15 +1,15 @@
 class Solution {
-    
+
     val letters: ArrayList<String> = arrayListOf()
-    val pads: Map<Char, String> = mapOf(
-        '2' to "abc",
-        '3' to "def",
-        '4' to "ghi",
-        '5' to "jkl",
-        '6' to "mno",
-        '7' to "pqrs",
-        '8' to "tuv",
-        '9' to "wxyz",
+    val pads: Array<String> = arrayOf(
+        "abc",
+        "def",
+        "ghi",
+        "jkl",
+        "mno",
+        "pqrs",
+        "tuv",
+        "wxyz"
     )
 
     fun letterCombinations(digits: String): List<String> {
@@ -27,7 +27,7 @@ class Solution {
             return
         }
 
-        for (pad in pads[target[start]]!!) {
+        for (pad in pads[target[start] - '2']) {
             travel(target, start + 1, combination + pad)
         }
     }
