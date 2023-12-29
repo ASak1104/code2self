@@ -41,5 +41,3 @@ class Solution {
         return r !in lands.indices || c !in lands[0].indices || visits[r][c] || lands[r][c] == '0'
     }
 }
-
-data class Node(val r: Int, val c: Int)
