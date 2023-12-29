@@ -1,19 +1,17 @@
+import java.util.*
+
 const val START = "JFK"
 
 class Solution {
 
-    val edgeLists: MutableMap<String, ArrayDeque<String>> = mutableMapOf()
-    val answer: ArrayList<String> = arrayListOf()
+    val edgeLists: MutableMap<String, PriorityQueue<String>> = HashMap(300)
+    val answer: ArrayList<String> = ArrayList(300)
 
     fun findItinerary(tickets: List<List<String>>): List<String> {
-        for (ticket in tickets) {
-            val (u, v) = ticket
-
-            edgeLists.getOrPut(u) { ArrayDeque() } += v
-            edgeLists.getOrPut(v) { ArrayDeque() }
+        for ((u, v) in tickets) {
+            edgeLists.getOrPut(u) { PriorityQueue() } += v
+            edgeLists.getOrPut(v) { PriorityQueue() }
         }
-
-        edgeLists.values.forEach { it.sort() }
 
         travel(START)
 
@@ -23,10 +21,10 @@ class Solution {
     }
 
     fun travel(u: String) {
-        val edges: ArrayDeque<String> = edgeLists[u]!!
+        val edges: PriorityQueue<String> = edgeLists[u]!!
 
         while (edges.isNotEmpty()) {
-            travel(edges.removeFirst())
+            travel(edges.poll())
         }
 
         answer += u
