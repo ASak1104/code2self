@@ -25,25 +25,15 @@ class Solution {
         return island
     }
 
-    fun travel(sr: Int, sc: Int) {
-        val queue: ArrayDeque<Node> = ArrayDeque()
+    fun travel(r: Int, c: Int) {
+        visits[r][c] = true
 
-        queue.addLast(Node(sr, sc))
-        visits[sr][sc] = true
-
-        while (queue.isNotEmpty()) {
-            val u: Node = queue.removeFirst()
-
-            for ((rw: Int, cw: Int) in weights) {
-                val v = Node(u.r + rw, u.c + cw)
-
-                if (isInvalid(v.r, v.c)) {
-                    continue
-                }
-
-                queue.addLast(v)
-                visits[v.r][v.c] = true
+        for ((rw, cw) in weights) {
+            if (isInvalid(r + rw, c + cw)) {
+                continue
             }
+
+            travel(r + rw, c + cw)
         }
     }
 
