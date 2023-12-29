@@ -30,4 +30,3 @@ class Solution {
         travel(start + 1, target, combinations)
     }
 }
-
