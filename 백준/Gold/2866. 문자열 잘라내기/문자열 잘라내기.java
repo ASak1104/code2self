@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 class Main {
 
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static String[] strings;
     static char[][] chars;
     static int rows, cols;
 
@@ -18,9 +19,20 @@ class Main {
         cols = Integer.parseInt(st.nextToken());
 
         chars = new char[rows][cols];
+        strings = new String[cols];
 
         for (int r = 0; r < rows; r++) {
             chars[r] = br.readLine().toCharArray();
+        }
+
+        for (int c = 0; c < cols; c++) {
+            StringBuilder sb = new StringBuilder(rows);
+
+            for (int r = 0; r < rows; r++) {
+                sb.append(chars[r][c]);
+            }
+
+            strings[c] = sb.toString();
         }
 
         System.out.println(findBound());
@@ -51,13 +63,7 @@ class Main {
         Set<String> words = new HashSet<>();
 
         for (int c = 0; c < cols; c++) {
-            StringBuilder sb = new StringBuilder(rows - start);
-
-            for (int r = start; r < rows; r++) {
-                sb.append(chars[r][c]);
-            }
-
-            String word = sb.toString();
+            String word = strings[c].substring(start);
 
             if (words.contains(word)) {
                 return true;
