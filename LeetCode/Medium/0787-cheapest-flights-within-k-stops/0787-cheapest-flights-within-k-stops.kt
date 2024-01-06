@@ -21,7 +21,7 @@ class Solution {
     }
 
     fun dijkstra(src: Int, dst: Int, k: Int): Int {
-        val dists = Array(edges.size) { Array(edges.size) { MAX } }
+        val dists = Array(edges.size) { Array(k + 1) { MAX } }
         val pq = PriorityQueue(compareBy(Node::cost))
 
         pq += Node(src, 0, 0)
@@ -29,7 +29,6 @@ class Solution {
 
         while (pq.isNotEmpty()) {
             val (u, count, cost) = pq.poll()
-
 
             for ((v, w) in edges[u]) {
                 if (cost + w >= dists[v][count]) {
@@ -43,7 +42,7 @@ class Solution {
                 }
             }
         }
-        
+
         val min = dists[dst].min()
 
         return if (min != MAX)
