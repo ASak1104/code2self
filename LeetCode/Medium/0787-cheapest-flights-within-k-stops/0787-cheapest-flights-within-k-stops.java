@@ -18,10 +18,6 @@ class Solution {
         }
 
         for (int[] flight : flights) {
-            if (flight[0] == dst) {
-                continue;
-            }
-            
             edges[flight[0]].add(new Edge(flight[1], flight[2]));
         }
 
@@ -49,7 +45,7 @@ class Solution {
 
                 dists[edge.node][u.count] = u.cost + edge.weight;
 
-                if (u.count < k) {
+                if (u.count < k && edge.node != dst) {
                     pq.add(new Node(edge.node, u.count + 1, u.cost + edge.weight));
                 }
             }
