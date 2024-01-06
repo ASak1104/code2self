@@ -18,6 +18,10 @@ class Solution {
         }
 
         for (int[] flight : flights) {
+            if (flight[0] == dst) {
+                continue;
+            }
+            
             edges[flight[0]].add(new Edge(flight[1], flight[2]));
         }
 
