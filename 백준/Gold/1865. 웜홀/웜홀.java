@@ -65,12 +65,10 @@ class Main {
                 for (int v = 0; v < N; v++) {
                     dists[u][v] = Math.min(dists[u][v], dists[u][k] + dists[k][v]);
                 }
-            }
-        }
 
-        for (int u = 0; u < N; u++) {
-            if (dists[u][u] < 0) {
-                return "YES\n";
+                if (dists[u][u] < 0) {
+                    return "YES\n";
+                }
             }
         }
 
