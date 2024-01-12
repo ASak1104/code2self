@@ -1,10 +1,10 @@
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StreamTokenizer;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.PriorityQueue;
 
 class Main {
@@ -12,7 +12,7 @@ class Main {
     static final int INF = (int) 1e9;
 
     static StreamTokenizer st = new StreamTokenizer(new InputStreamReader(System.in));
-    static List<Edge>[] edges;
+    static Map<Integer, Integer>[] edges;
     static int n, m;
 
     public static int readInt() throws IOException {
@@ -24,18 +24,19 @@ class Main {
     public static void main(String[] args) throws IOException {
         n = readInt();
         m = readInt();
-        edges = new List[n];
+        edges = new Map[n];
 
         for (int u = 0; u < n; u++) {
-            edges[u] = new ArrayList<>();
+            edges[u] = new HashMap<>();
         }
 
         for (int i = 0; i < m; i++) {
             int u = readInt() - 1;
             int v = readInt() - 1;
             int w = readInt();
+            int prev = edges[u].getOrDefault(v, INF);
 
-            edges[u].add(new Edge(v, w));
+            edges[u].put(v, Math.min(w, prev));
         }
 
         int src = readInt() - 1;
@@ -60,29 +61,19 @@ class Main {
                 return cost;
             }
 
-            for (Edge edge : edges[u]) {
-                if (dists[edge.node] <= cost + edge.weight) {
+            for (int v : edges[u].keySet()) {
+                int newDist = cost + edges[u].get(v);
+
+                if (dists[v] <= newDist) {
                     continue;
                 }
 
-                dists[edge.node] = cost + edge.weight;
-                pq.add(new int[]{edge.node, cost + edge.weight});
+                dists[v] = newDist;
+                pq.add(new int[]{v, newDist});
             }
         }
 
         return dists[dst];
-    }
-
-    static class Edge {
-
-        int node;
-        int weight;
-
-        public Edge(int node, int weight) {
-            this.node = node;
-            this.weight = weight;
-        }
-
     }
 
 }
