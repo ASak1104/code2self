@@ -1,74 +1,69 @@
-import java.util.*
+import java.io.InputStreamReader
+import java.io.StreamTokenizer
 
-lateinit var edges: Array<MutableMap<Int, Int>>
+val st = StreamTokenizer(InputStreamReader(System.`in`))
 
-fun main() = with(System.`in`.bufferedReader()) {
+var n = 0
+var m = 0
+var w = 0
+
+lateinit var edges: ArrayList<Triple<Int, Int, Int>>
+
+fun readInt() = st.run {
+    nextToken()
+    nval.toInt()
+}
+
+fun main() {
     val bw = System.out.bufferedWriter()
+    val tc = readInt()
 
-    repeat(readLine().toInt()) {
-        val (n, m, w) = StringTokenizer(readLine()).run {
-            Triple(nextToken().toInt(), nextToken().toInt(), nextToken().toInt())
-        }
-        edges = Array(n) { mutableMapOf() }
-
-        repeat(m) { readEdge(readLine()) }
-
-        repeat(w) { readDirectedEdge(readLine()) }
-
-        val dist = IntArray(n)
-
-        repeat(n - 1) {
-            for (u in dist.indices) {
-                for ((v, c) in edges[u].entries) {
-                    val d = dist[u] + c
-
-                    if (dist[v] > d) {
-                        dist[v] = d
-                    }
-                }
-            }
-        }
-
-        for (u in dist.indices) {
-            for ((v, c) in edges[u].entries) {
-                if (dist[v] > dist[u] + c) {
-                    bw.append("YES\n")
-                    return@repeat
-                }
-            }
-        }
-
-        bw.append("NO\n")
+    repeat(tc) {
+        bw.append(checkNegativeCycle())
     }
-    close()
 
     bw.flush()
     bw.close()
 }
 
+fun checkNegativeCycle(): String {
+    n = readInt()
+    m = readInt()
+    w = readInt()
+    edges = ArrayList(m)
 
+    repeat(m) {
+        val u = readInt() - 1
+        val v = readInt() - 1
+        val w = readInt()
 
-fun readEdge(line: String) {
-    with(StringTokenizer(line)) {
-        val u = nextToken().toInt() - 1
-        val v = nextToken().toInt() - 1
-        val c = nextToken().toInt()
+        edges.add(Triple(u, v, w))
+        edges.add(Triple(v, u, w))
+    }
 
-        if ((edges[u][v] ?: 10001) > c) {
-            edges[u][v] = c
-            edges[v][u] = c
+    repeat(w) {
+        val u = readInt() - 1
+        val v = readInt() - 1
+        val w = -readInt()
+
+        edges.add(Triple(u, v, w))
+    }
+
+    val dist = IntArray(n)
+
+    repeat(n) {
+        for ((u, v, w) in edges) {
+            if (dist[v] <= dist[u] + w) {
+                continue
+            }
+
+            dist[v] = dist[u] + w
+
+            if (it == n - 1) {
+                return "YES\n"
+            }
         }
     }
-}
 
-fun readDirectedEdge(line: String) {
-    with(StringTokenizer(line)) {
-        val u = nextToken().toInt() - 1
-        val v = nextToken().toInt() - 1
-        val c = -nextToken().toInt()
-
-        if ((edges[u][v] ?: 10001) > c) {
-            edges[u][v] = c
-        }
-    }
+    return "NO\n"
 }
