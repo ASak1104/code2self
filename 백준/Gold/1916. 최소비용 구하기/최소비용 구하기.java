@@ -1,10 +1,10 @@
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StreamTokenizer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.PriorityQueue;
 
 class Main {
@@ -12,7 +12,7 @@ class Main {
     static final int INF = (int) 1e9;
 
     static StreamTokenizer st = new StreamTokenizer(new InputStreamReader(System.in));
-    static Map<Integer, Integer>[] edges;
+    static List<Edge>[] edges;
     static int n, m;
 
     public static int readInt() throws IOException {
@@ -24,19 +24,18 @@ class Main {
     public static void main(String[] args) throws IOException {
         n = readInt();
         m = readInt();
-        edges = new Map[n];
+        edges = new List[n];
 
         for (int u = 0; u < n; u++) {
-            edges[u] = new HashMap<>();
+            edges[u] = new ArrayList<>();
         }
 
         for (int i = 0; i < m; i++) {
             int u = readInt() - 1;
             int v = readInt() - 1;
             int w = readInt();
-            int prev = edges[u].getOrDefault(v, INF);
 
-            edges[u].put(v, Math.min(w, prev));
+            edges[u].add(new Edge(v, w));
         }
 
         int src = readInt() - 1;
@@ -57,19 +56,33 @@ class Main {
             int u = pq.peek()[0];
             int cost = pq.poll()[1];
 
-            for (int v : edges[u].keySet()) {
-                int newDist = cost + edges[u].get(v);
+            if (u == dst) {
+                return cost;
+            }
 
-                if (dists[v] <= newDist) {
+            for (Edge edge : edges[u]) {
+                if (dists[edge.node] <= cost + edge.weight) {
                     continue;
                 }
 
-                dists[v] = newDist;
-                pq.add(new int[]{v, newDist});
+                dists[edge.node] = cost + edge.weight;
+                pq.add(new int[]{edge.node, cost + edge.weight});
             }
         }
 
         return dists[dst];
+    }
+
+    static class Edge {
+
+        int node;
+        int weight;
+
+        public Edge(int node, int weight) {
+            this.node = node;
+            this.weight = weight;
+        }
+
     }
 
 }
