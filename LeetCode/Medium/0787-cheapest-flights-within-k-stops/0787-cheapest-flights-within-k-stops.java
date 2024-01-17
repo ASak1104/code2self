@@ -37,6 +37,10 @@ class Solution {
 
         while (!pq.isEmpty()) {
             Node u = pq.poll();
+            
+            if (u.node == dst) {
+                return u.cost;
+            }
 
             for (Edge edge : edges[u.node]) {
                 if (u.cost + edge.weight >= dists[edge.node][u.count]) {
