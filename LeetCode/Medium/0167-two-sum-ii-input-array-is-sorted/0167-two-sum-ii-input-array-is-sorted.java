@@ -2,10 +2,6 @@ class Solution {
 
     public static final int NOT_FOUND = -1;
 
-    public static void main(String[] args) {
-        new Solution().twoSum(new int[]{2, 7, 11, 15}, 9);
-    }
-
     public int[] twoSum(int[] numbers, int target) {
         int prev = numbers[0] - 1;
 
