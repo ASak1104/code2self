@@ -17,8 +17,8 @@ class Solution {
             l2 = l2.next;
         }
 
-        offset = addSingleNode(l1);
-        offset = addSingleNode(l2);
+        addSingleNode(l1);
+        addSingleNode(l2);
 
         if (offset > 0) {
             node.next = new ListNode(offset);
@@ -27,7 +27,7 @@ class Solution {
         return root.next;
     }
 
-    int addSingleNode(ListNode target) {
+    void addSingleNode(ListNode target) {
         while (nonNull(target)) {
             offset += target.val;
             node.next = new ListNode(offset % 10);
@@ -36,8 +36,6 @@ class Solution {
             node = node.next;
             target = target.next;
         }
-
-        return offset;
     }
 
 }
