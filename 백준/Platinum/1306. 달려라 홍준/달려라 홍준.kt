@@ -3,7 +3,7 @@ import java.util.*
 const val MAX_LIGHT = 1e6.toInt()
 
 val br = System.`in`.bufferedReader()
-val bw = System.out.bufferedWriter()
+val sb = StringBuilder()
 
 var n = 0
 var m = 0
@@ -22,8 +22,7 @@ fun main() {
 
     run()
 
-    bw.flush()
-    bw.close()
+    println(sb)
     br.close()
 }
 
@@ -36,7 +35,7 @@ fun run() {
         pq += neonsigns[i]
     }
 
-    bw.append("${pq.peek()} ")
+    sb.append(pq.peek()).append(' ')
 
     for (mid in m..n - m) {
         lights[neonsigns[mid - m]]--
@@ -47,6 +46,6 @@ fun run() {
             pq.poll()
         }
 
-        bw.append("${pq.peek()} ")
+        sb.append(pq.peek()).append(' ')
     }
 }
