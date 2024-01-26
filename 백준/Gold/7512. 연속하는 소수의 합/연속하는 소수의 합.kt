@@ -4,7 +4,7 @@ import kotlin.math.sqrt
 const val PRIME_BOUNDARY = 1e7.toInt()
 
 val isPrimes = BooleanArray(PRIME_BOUNDARY) { true }
-val primes = ArrayList<Int>(446)
+val primeSums = ArrayList<Long>(664579)
 
 fun main() = with(System.`in`.bufferedReader()) {
     val tc = readLine().toInt()
@@ -38,27 +38,31 @@ fun setPrimes() {
         }
     }
 
-    for (p in 2 until PRIME_BOUNDARY) {
+    primeSums += 2
+
+    for (p in 3 until PRIME_BOUNDARY) {
         if (!isPrimes[p]) {
             continue
         }
 
-        primes += p
+        primeSums += primeSums.last() + p
     }
 }
 
 fun getScenario(sizes: IntArray): Int {
     val counts = HashMap<Int, Int>()
 
-    for (i in 2 until PRIME_BOUNDARY) {
+    for (left in primeSums.indices) {
         for (size in sizes) {
-            if (i + size > primes.size) {
+            val right = left + size
+
+            if (right > primeSums.size || primeSums[right] - primeSums[left] > PRIME_BOUNDARY) {
                 continue
             }
 
-            val sum = simulate(i, size)
+            val sum = (primeSums[right] - primeSums[left]).toInt()
 
-            if (sum >= PRIME_BOUNDARY || !isPrimes[sum]) {
+            if (!isPrimes[sum]) {
                 continue
             }
 
@@ -71,14 +75,4 @@ fun getScenario(sizes: IntArray): Int {
     }
 
     return -1
-}
-
-fun simulate(start: Int, size: Int): Int {
-    var sum = 0
-
-    for (i in start until start + size) {
-        sum += primes[i]
-    }
-
-    return sum
 }
