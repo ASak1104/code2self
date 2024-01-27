@@ -33,6 +33,11 @@ class Solution {
             int size = end - mid + 1;
             int maxCount = 0;
 
+            if (size < maxSize) {
+                right = mid - 1;
+                continue;
+            }
+
             for (char c = 'A'; c <= 'Z'; c++) {
                 maxCount = Math.max(maxCount, prefixCounts[end][c] - prefixCounts[mid - 1][c]);
             }
