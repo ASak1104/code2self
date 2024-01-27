@@ -1,29 +1,18 @@
-import java.util.ArrayList;
-import java.util.List;
-
 class Solution {
 
-    List<Character> chars;
     int[][] prefixCounts;
     int[] counts;
     int maxSize;
 
     public int characterReplacement(String s, int k) {
-        chars = new ArrayList<>(26);
-        prefixCounts = new int[91][s.length() + 1];
+        prefixCounts = new int[s.length() + 1][91];
         counts = new int[91];
 
         for (int i = 1; i <= s.length(); i++) {
             counts[s.charAt(i - 1)]++;
 
             for (char c = 'A'; c <= 'Z'; c++) {
-                prefixCounts[c][i] = counts[c];
-            }
-        }
-
-        for (char c = 'A'; c <= 'Z'; c++) {
-            if (counts[c] != 0) {
-                chars.add(c);
+                prefixCounts[i][c] = counts[c];
             }
         }
 
@@ -35,7 +24,7 @@ class Solution {
     }
 
     private int findLeft(int end, int k) {
-        int ret = 0;
+        int ret = end;
         int left = 1;
         int right = end;
 
@@ -44,8 +33,8 @@ class Solution {
             int size = end - mid + 1;
             int maxCount = 0;
 
-            for (char c : chars) {
-                maxCount = Math.max(maxCount, prefixCounts[c][end] - prefixCounts[c][mid - 1]);
+            for (char c = 'A'; c <= 'Z'; c++) {
+                maxCount = Math.max(maxCount, prefixCounts[end][c] - prefixCounts[mid - 1][c]);
             }
 
             if (size <= maxCount + k) {
