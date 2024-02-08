@@ -41,7 +41,9 @@ class Main {
         while (!deque.isEmpty()) {
             int[] u = deque.removeFirst();
 
-            maxDistance = Math.max(maxDistance, u[2]);
+            if (maxDistance < u[2]) {
+                maxDistance = u[2];
+            }
 
             for (int i = 0; i < 4; i++) {
                 int vr = u[0] + rowWeights[i];
