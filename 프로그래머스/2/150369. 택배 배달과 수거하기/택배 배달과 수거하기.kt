@@ -29,6 +29,18 @@ class Solution {
             return
         }
 
+        val lastMin = minOf(deliveries[last], pickups[last])
+        
+        if (cap <= lastMin) {
+            val p = lastMin / cap
+            
+            deliveries[last] -= p * cap
+            pickups[last] -= p * cap
+            dist += 2L * (last + 1) * p
+            
+            return
+        }
+
         drive(deliveries)
         drive(pickups)
     }
