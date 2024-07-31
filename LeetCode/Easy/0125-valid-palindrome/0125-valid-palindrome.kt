@@ -1,11 +1,23 @@
 class Solution {
+
+    private val regex: Regex = Regex("[^a-z0-9]")
     
-    val regex = Regex("[^a-z^0-9]")
-
     fun isPalindrome(s: String): Boolean {
-        val target = s.lowercase()
-            .replace(regex, "")
+        val preprocessed: String = preprocess(s)
+        val length: Int = preprocessed.length
+        val mid: Int = length ushr 1
 
-        return target == target.reversed()
+        for (i in 0 until mid) {
+            if (preprocessed[i] != preprocessed[length - i - 1]) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    private fun preprocess(s: String): String {
+        return s.lowercase()
+            .replace(regex, "")
     }
 }
