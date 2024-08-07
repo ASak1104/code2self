@@ -35,7 +35,7 @@ class Solution {
         var count = 0
 
         for ((keySet, scores) in keyToScore) {
-            if (!keySet.containsAll(keys)) {
+            if (keys.any { it !in keySet }) {
                 continue
             }
 
