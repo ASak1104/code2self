@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Main {
@@ -17,7 +16,7 @@ public class Main {
         List<Integer> matched = kmp.match(T);
 
         sb.append(matched.size()).append(System.lineSeparator());
-        matched.forEach(i -> sb.append(i + 1).append(' '));
+        matched.forEach(i -> sb.append(i).append(' '));
 
         System.out.println(sb);
     }
@@ -28,10 +27,12 @@ class KMP {
 
     private final char[] p;
     private final int[] fails;
+    private final int m;
 
     public KMP(String pattern) {
         p = pattern.toCharArray();
-        fails = new int[p.length];
+        m = p.length;
+        fails = new int[m];
 
         int j = 0;
 
@@ -62,15 +63,15 @@ class KMP {
                 continue;
             }
 
-            if (j == p.length - 1) {
-                matched.add(i - j);
+            if (j == m - 1) {
+                matched.add(i - j + 1);
                 j = fails[j];
             } else {
                 j++;
             }
         }
 
-        return Collections.unmodifiableList(matched);
+        return matched;
     }
 
 }
