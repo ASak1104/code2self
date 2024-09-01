@@ -11,6 +11,7 @@ class Solution {
     private static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private static final StringBuilder sb = new StringBuilder();
 
+    private static StringTokenizer st;
     private static List<int[]> people, stairs;
     private static int T, N, M, answer;
 
@@ -19,12 +20,11 @@ class Solution {
 
         for (int t = 1; t <= T; t++) {
             N = Integer.parseInt(br.readLine());
-
             people = new ArrayList<>();
             stairs = new ArrayList<>();
 
             for (int r = 0; r < N; r++) {
-                StringTokenizer st = new StringTokenizer(br.readLine());
+                st = new StringTokenizer(br.readLine());
 
                 for (int c = 0; c < N; c++) {
                     int value = Integer.parseInt(st.nextToken());
