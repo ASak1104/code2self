@@ -12,13 +12,13 @@ class Solution {
     private static final StringBuilder sb = new StringBuilder();
 
     private static List<int[]> people, stairs;
-    private static int answer;
+    private static int T, N, M, answer;
 
     public static void main(String[] args) throws IOException {
-        int T = Integer.parseInt(br.readLine());
+        T = Integer.parseInt(br.readLine());
 
         for (int t = 1; t <= T; t++) {
-            int N = Integer.parseInt(br.readLine());
+            N = Integer.parseInt(br.readLine());
 
             people = new ArrayList<>();
             stairs = new ArrayList<>();
@@ -37,21 +37,22 @@ class Solution {
                 }
             }
 
+            M = people.size();
             answer = Integer.MAX_VALUE;
 
-            solve(0, new int[people.size()]);
+            solve(0, new int[M]);
 
-            sb.append("#").append(t).append(" ").append(answer).append("\n");
+            sb.append('#').append(t).append(' ').append(answer).append('\n');
         }
 
-        br.close();
-
         System.out.println(sb);
+        br.close();
     }
 
     private static void solve(int i, int[] cases) {
-        if (i == cases.length) {
+        if (i == M) {
             answer = Math.min(answer, simulate(cases));
+
             return;
         }
 
@@ -63,10 +64,12 @@ class Solution {
     }
 
     private static int simulate(int[] cases) {
-        PriorityQueue<Integer> first = new PriorityQueue<>();
-        PriorityQueue<Integer> second = new PriorityQueue<>();
+        PriorityQueue<Integer> first = new PriorityQueue<>(M);
+        PriorityQueue<Integer> second = new PriorityQueue<>(M);
+        int firstCost = stairs.get(0)[2];
+        int secondCost = stairs.get(1)[2];
 
-        for (int i = 0; i < cases.length; i++) {
+        for (int i = 0; i < M; i++) {
             int[] person = people.get(i);
             int[] stair = stairs.get(cases[i]);
             PriorityQueue<Integer> target = cases[i] == 0 ? first : second;
@@ -74,7 +77,7 @@ class Solution {
             target.add(Math.abs(person[0] - stair[0]) + Math.abs(person[1] - stair[1]));
         }
 
-        return Math.max(calc(first, stairs.get(0)[2]), calc(second, stairs.get(1)[2]));
+        return Math.max(calc(first, firstCost), calc(second, secondCost));
     }
 
     private static int calc(PriorityQueue<Integer> waitingPeople, int cost) {
