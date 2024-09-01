@@ -39,9 +39,9 @@ class Solution {
 
             M = people.size();
             answer = Integer.MAX_VALUE;
-
+            
             solve(0, new int[M]);
-
+            
             sb.append('#').append(t).append(' ').append(answer).append('\n');
         }
 
