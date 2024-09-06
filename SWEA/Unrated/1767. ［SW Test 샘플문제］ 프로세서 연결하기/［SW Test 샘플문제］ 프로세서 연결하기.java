@@ -72,56 +72,46 @@ public class Solution {
         Pair coil = targets.get(i);
 
         for (Pair w : weights) {
-            int count = mark(coil, w);
+            if (isValid(coil, w)) {
+                int count = mark(coil, w, false);
 
-            if (count > 0) {
                 simulate(i + 1, core + 1, cable + count);
-                unmark(coil, w);
+                mark(coil, w, true);
             } else {
                 simulate(i + 1, core, cable);
             }
         }
     }
 
-    private static int mark(Pair core, Pair w) {
-        int count = 0;
+    private static boolean isValid(Pair core, Pair w) {
         int r = core.r + w.r;
         int c = core.c + w.c;
 
         while (0 <= r && r < N && 0 <= c && c < N) {
             if (cores[r][c] || !cells[r][c]) {
-                while (true) {
-                    r -= w.r;
-                    c -= w.c;
-
-                    if (r == core.r && c == core.c) {
-                        break;
-                    }
-
-                    cells[r][c] = true;
-                }
-
-                return 0;
+                return false;
             }
 
-            cells[r][c] = false;
+            r += w.r;
+            c += w.c;
+        }
+
+        return true;
+    }
+
+    private static int mark(Pair core, Pair w, boolean v) {
+        int count = 0;
+        int r = core.r + w.r;
+        int c = core.c + w.c;
+
+        while (0 <= r && r < N && 0 <= c && c < N) {
+            cells[r][c] = v;
             count++;
             r += w.r;
             c += w.c;
         }
 
         return count;
-    }
-
-    private static void unmark(Pair core, Pair w) {
-        int r = core.r + w.r;
-        int c = core.c + w.c;
-
-        while (0 <= r && r < N && 0 <= c && c < N) {
-            cells[r][c] = true;
-            r += w.r;
-            c += w.c;
-        }
     }
 
 }
