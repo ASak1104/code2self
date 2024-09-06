@@ -59,6 +59,8 @@ public class Solution {
     private static void simulate(int ur, int uc, int hob, boolean cutable) {
         if (map[ur][uc] == target) {
             answer = Math.max(answer, hob);
+
+            return;
         }
 
         for (int[] weight : weights) {
