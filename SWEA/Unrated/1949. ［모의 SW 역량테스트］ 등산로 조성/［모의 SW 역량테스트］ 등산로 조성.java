@@ -5,12 +5,7 @@ import java.util.StringTokenizer;
 
 public class Solution {
 
-    private static final int[][] weights = new int[][]{
-        new int[]{0, 1},
-        new int[]{1, 0},
-        new int[]{0, -1},
-        new int[]{-1, 0},
-    };
+    private static final int[][] weights = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 
     private static int[][] map;
     private static int T, N, K, target, answer;
