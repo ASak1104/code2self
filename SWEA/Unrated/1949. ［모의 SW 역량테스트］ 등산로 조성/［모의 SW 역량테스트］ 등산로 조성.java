@@ -65,20 +65,18 @@ public class Solution {
             int vr = ur + weight[0];
             int vc = uc + weight[1];
 
-            if (vr < 0 || vr >= N || vc < 0 || vc >= N) {
+            if (vr < 0 || vr >= N || vc < 0 || vc >= N || map[ur][uc] >= map[vr][vc]) {
                 continue;
             }
 
-            if (map[ur][uc] < map[vr][vc]) {
-                simulate(vr, vc, hob + 1, cutable);
+            simulate(vr, vc, hob + 1, cutable);
 
-                if (cutable) {
-                    int origin = map[vr][vc];
+            if (cutable) {
+                int origin = map[vr][vc];
 
-                    map[vr][vc] = Math.max(map[ur][uc] + 1, map[vr][vc] - K);
-                    simulate(vr, vc, hob + 1, false);
-                    map[vr][vc] = origin;
-                }
+                map[vr][vc] = Math.max(map[ur][uc] + 1, map[vr][vc] - K);
+                simulate(vr, vc, hob + 1, false);
+                map[vr][vc] = origin;
             }
         }
     }
