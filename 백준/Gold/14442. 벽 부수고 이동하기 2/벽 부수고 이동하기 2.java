@@ -7,12 +7,11 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-    private static final int INF = (int) 1e9;
     private static final int[][] stepWeights = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 
     private static boolean[][][] visit;
     private static boolean[][] map;
-    private static int N, M, K, answer;
+    private static int N, M, K;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -23,7 +22,6 @@ public class Main {
         K = Integer.parseInt(st.nextToken());
         map = new boolean[N][M];
         visit = new boolean[N][M][K + 1];
-        answer = INF;
 
         for (int r = 0; r < N; r++) {
             char[] row = br.readLine().toCharArray();
@@ -33,13 +31,11 @@ public class Main {
             }
         }
 
-        simulate();
-
-        System.out.println(answer != INF ? answer : -1);
+        System.out.println(simulate());
         br.close();
     }
 
-    private static void simulate() {
+    private static int simulate() {
         Deque<Step> dq = new ArrayDeque<>();
 
         dq.addLast(new Step(0, 0, 0, 1));
@@ -49,9 +45,7 @@ public class Main {
             Step u = dq.removeFirst();
 
             if (u.r == N - 1 && u.c == M - 1) {
-                answer = Math.min(answer, u.step);
-
-                continue;
+                return u.step;
             }
 
             for (int[] w : stepWeights) {
@@ -73,6 +67,8 @@ public class Main {
                 }
             }
         }
+
+        return -1;
     }
 
 }
