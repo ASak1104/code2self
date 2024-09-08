@@ -7,23 +7,26 @@ import java.util.StringTokenizer;
 
 public class Solution {
 
+    private static List<Integer>[] natGraph, revGraph;
+    private static int T, N, M;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-        int T = Integer.parseInt(br.readLine());
+        T = Integer.parseInt(br.readLine());
 
         for (int t = 1; t <= T; t++) {
-            int n = Integer.parseInt(br.readLine());
-            int m = Integer.parseInt(br.readLine());
-            List<Integer>[] natGraph = new List[n];
-            List<Integer>[] revGraph = new List[n];
+            N = Integer.parseInt(br.readLine());
+            M = Integer.parseInt(br.readLine());
+            natGraph = new List[N];
+            revGraph = new List[N];
 
-            for (int u = 0; u < n; u++) {
+            for (int u = 0; u < N; u++) {
                 natGraph[u] = new ArrayList<>();
                 revGraph[u] = new ArrayList<>();
             }
 
-            for (int i = 0; i < m; i++) {
+            for (int i = 0; i < M; i++) {
                 StringTokenizer st = new StringTokenizer(br.readLine());
                 int u = Integer.parseInt(st.nextToken()) - 1;
                 int v = Integer.parseInt(st.nextToken()) - 1;
@@ -34,13 +37,13 @@ public class Solution {
 
             int answer = 0;
 
-            for (int u = 0; u < n; u++) {
+            for (int u = 0; u < N; u++) {
                 int count = -1;
 
-                count += travel(u, natGraph, new boolean[n]);
-                count += travel(u, revGraph, new boolean[n]);
+                count += travel(u, natGraph, new boolean[N]);
+                count += travel(u, revGraph, new boolean[N]);
 
-                if (count == n) {
+                if (count == N) {
                     answer++;
                 }
             }
