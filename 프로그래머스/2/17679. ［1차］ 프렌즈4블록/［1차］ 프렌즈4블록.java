@@ -4,7 +4,7 @@ class Solution {
     
     int rows, cols;
     
-    List<List<Character>> lists;
+    char[][] lists;
     Set<Point> points;
 
     public int solution(int m, int n, String[] board) {
@@ -18,10 +18,12 @@ class Solution {
             
             for (int r = 0; r < rows - 1; r++) {
                 for (int c = 0; c < cols - 1; c++) {
+                    if (lists[r][c] == '\0') {
+                        break;
+                    }
                     mark(r, c);
                 }
             }
-            
             compact();
         } while (!points.isEmpty());
         
@@ -31,28 +33,26 @@ class Solution {
     void init(int n, int m, String[] strings) {
         rows = m;
         cols = n;
-        lists = new ArrayList<>(rows);
+        lists = new char[rows][cols];
         points = new HashSet<>();
         
         for (int r = 0; r < rows; r++) {
-            lists.add(new ArrayList<>(cols));
+            lists[r] = new char[cols];
         }
         
         for (int c = 0; c < cols; c++) {
             var s = strings[cols - c - 1];
             
             for (int r = 0; r < rows; r++) {
-                lists.get(r).add(s.charAt(r));
+                lists[r][c] = s.charAt(r);
             }
         }
     }
     
     void mark(int r, int c) {
-        if (lists.get(r).get(c) == '\0' 
-            || lists.get(r).get(c) != lists.get(r).get(c)
-            || lists.get(r).get(c) != lists.get(r).get(c + 1)
-            || lists.get(r).get(c) != lists.get(r + 1).get(c)
-            || lists.get(r).get(c) != lists.get(r + 1).get(c + 1)) {
+        if (lists[r][c] != lists[r][c + 1] ||
+            lists[r][c] != lists[r + 1][c] ||
+            lists[r][c] != lists[r + 1][c + 1]) {
             return;
         }
         
@@ -65,14 +65,20 @@ class Solution {
     
     void compact() {
         for (var p : points) {
-            lists.get(p.r).set(p.c, null);
+            lists[p.r][p.c] = '\0';
         }
         
         for (var list : lists) {
-            list.removeIf(Objects::isNull);
-            
-            while (list.size() < cols) {
-                list.add('\0');
+            int w = 0;
+
+            for (int i = 0; i < list.length; i++) {
+                if (list[i] != '\0') {
+                    list[w++] = list[i];
+                }
+            }
+
+            while (w < list.length) {
+                list[w++] = '\0';
             }
         }
     }
