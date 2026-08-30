@@ -22,6 +22,7 @@
 | Problem Name | Difficulty |
 | ------- | ------- |
 | [0380-insert-delete-getrandom-o1](https://github.com/ASak1104/code2self/tree/main/LeetCode/Medium/0380-insert-delete-getrandom-o1/) | Medium |
+| [3290-maximum-multiplication-score](https://github.com/ASak1104/code2self/tree/main/LeetCode/Medium/3290-maximum-multiplication-score/) | Medium |
 ## Math
 | Problem Name | Difficulty |
 | ------- | ------- |
@@ -30,4 +31,8 @@
 | Problem Name | Difficulty |
 | ------- | ------- |
 | [0380-insert-delete-getrandom-o1](https://github.com/ASak1104/code2self/tree/main/LeetCode/Medium/0380-insert-delete-getrandom-o1/) | Medium |
+## Dynamic Programming
+| Problem Name | Difficulty |
+| ------- | ------- |
+| [3290-maximum-multiplication-score](https://github.com/ASak1104/code2self/tree/main/LeetCode/Medium/3290-maximum-multiplication-score/) | Medium |
 <!---LeetCode Topics End-->
