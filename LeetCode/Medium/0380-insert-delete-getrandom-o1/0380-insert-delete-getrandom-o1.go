@@ -8,7 +8,7 @@ type RandomizedSet struct {
 }
 
 func Constructor() RandomizedSet {
-	return RandomizedSet{idxByVal: make(map[int]int, 200_000), vals: make([]int, 0, 200_000)}
+	return RandomizedSet{idxByVal: make(map[int]int), vals: make([]int, 0)}
 }
 
 func (s *RandomizedSet) Insert(val int) bool {
