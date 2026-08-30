@@ -8,11 +8,11 @@ type RandomizedSet struct {
 }
 
 func Constructor() RandomizedSet {
-	return RandomizedSet{idxByVal: make(map[int]int), vals: make([]int, 0)}
+	return RandomizedSet{idxByVal: make(map[int]int, 200_000), vals: make([]int, 0, 200_000)}
 }
 
 func (s *RandomizedSet) Insert(val int) bool {
-	if s.has(val) {
+	if _, ok := s.idxByVal[val]; ok {
 		return false
 	}
 	s.idxByVal[val] = len(s.vals)
@@ -21,14 +21,14 @@ func (s *RandomizedSet) Insert(val int) bool {
 }
 
 func (s *RandomizedSet) Remove(val int) bool {
-	if !s.has(val) {
+	tdx, ok := s.idxByVal[val]
+	if !ok {
 		return false
 	}
-	tdx := s.idxByVal[val]
 	ldx := len(s.vals) - 1
-
-	s.idxByVal[s.vals[ldx]] = tdx
-	s.vals[tdx], s.vals[ldx] = s.vals[ldx], s.vals[tdx]
+	lv := s.vals[ldx]
+	s.idxByVal[lv] = tdx
+	s.vals[tdx] = lv
 
 	delete(s.idxByVal, val)
 	s.vals = s.vals[:ldx]
@@ -39,9 +39,4 @@ func (s *RandomizedSet) Remove(val int) bool {
 func (s *RandomizedSet) GetRandom() int {
 	tdx := rand.IntN(len(s.vals))
 	return s.vals[tdx]
-}
-
-func (s *RandomizedSet) has(val int) bool {
-	_, ok := s.idxByVal[val]
-	return ok
 }
