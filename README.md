@@ -22,6 +22,7 @@
 | Problem Name | Difficulty |
 | ------- | ------- |
 | [0380-insert-delete-getrandom-o1](https://github.com/ASak1104/code2self/tree/main/LeetCode/Medium/0380-insert-delete-getrandom-o1/) | Medium |
+| [1046-last-stone-weight](https://github.com/ASak1104/code2self/tree/main/LeetCode/Easy/1046-last-stone-weight/) | Easy |
 | [3290-maximum-multiplication-score](https://github.com/ASak1104/code2self/tree/main/LeetCode/Medium/3290-maximum-multiplication-score/) | Medium |
 ## Math
 | Problem Name | Difficulty |
@@ -35,4 +36,8 @@
 | Problem Name | Difficulty |
 | ------- | ------- |
 | [3290-maximum-multiplication-score](https://github.com/ASak1104/code2self/tree/main/LeetCode/Medium/3290-maximum-multiplication-score/) | Medium |
+## Heap (Priority Queue)
+| Problem Name | Difficulty |
+| ------- | ------- |
+| [1046-last-stone-weight](https://github.com/ASak1104/code2self/tree/main/LeetCode/Easy/1046-last-stone-weight/) | Easy |
 <!---LeetCode Topics End-->
